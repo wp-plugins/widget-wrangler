@@ -1,0 +1,105 @@
+#ww-active-items,
+#ww-disabled-items {
+  margin: 8px 0px;
+}
+#ww-active-items li {
+  background: #fff;
+}
+#ww-disabled-items li {
+  background: #eee; 
+}
+
+li.ww-item {
+  line-height: 30px;
+  border-bottom: 1px solid #bbb;
+  border-top: 1px solid #eee;
+  margin: 0px;
+  padding: 0px 4px;
+}
+.ww-widget-weight {
+  display: block;
+  float: right;
+  margin-top: 4px;
+}
+#ww-disabled-items .ww-widget-weight {
+  display: none;
+}
+#ww-active-items li:hover {
+  cursor: n-resize;
+}
+#all-widgets {
+  font: normal 18px/20px Arial;
+}
+#all-widgets table {
+  border: 1px solid #000;
+  width: 98%;
+}
+#all-widgets table th {
+  background-color: #444;
+  color: #fff;
+  padding: 4px 6px;
+}
+#all-widgets table td {
+  font: normal 18px/20px Arial;
+  padding: 8px 12px;
+  border-bottom: 1px solid #666;
+}
+#all-widgets th.default {width: 42px; font: normal 12px serif;}
+#all-widgets td.default {width: 42px; text-align: center;}
+#all-widgets td.ewid { font-size: 14px; text-align: center; }
+#all-widgets td.title { font-weight: bold; width: 60%; }
+#all-widgets td.name { font-size: 16px;}
+#all-widgets td.edit { text-align: center;}
+
+.ww-clone-widgets {
+  width: 300px;
+  float: left;
+  margin: 0px 0px 0px 24px;
+}
+.ww-clone-widgets li {
+  background-color: #fff;
+  margin: 0px 0px 8px 0px;
+  list-style: none;
+  list-style-type: none;
+  list-style-image: none;
+  list-style-position: outside;
+  border: 1px solid #666;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+.ww-clone-widgets h4 {
+  margin: 0px;
+  padding: 6px 12px;
+}
+.ww-clone-widget-click {
+  float: right;
+  padding: 6px 4px;
+  cursor: pointer;
+  color:#21759B;
+  text-decoration: underline;
+}
+.ww-clone-widget-details{
+  padding: 4px 8px;
+  margin: 3px 4px 4px;
+  display: none;
+  border: 1px solid #bbb;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  background-color: #eee;
+}
+.ww-clone-submit {
+  display: block;
+  width: auto;
+  margin: 0px 0px 0px auto;
+}
+.adv-parse-description {
+  color: #444;padding-left: 12px;
+}
+.adv-parse-description ul  { }
+.adv-parse-description ul li {
+  list-style: disc;
+  list-style-type: disc;
+  list-style-position: inside;
+  font: normal 11px Arial;
+  color: #555;
+}
