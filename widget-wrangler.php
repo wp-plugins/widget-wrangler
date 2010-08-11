@@ -76,6 +76,7 @@ function ww_menu()
 {
   add_submenu_page( 'edit.php?post_type=widget', 'Default Widgets', 'Defaults', 'manage_options', 'ww-defaults', 'ww_defaults_page');
   add_submenu_page( 'edit.php?post_type=widget', 'Default Widgets', 'Clone WP Widget', 'manage_options', 'ww-clone', 'ww_clone_page');
+  add_submenu_page( 'edit.php?post_type=widget', 'Widget Sidebars', 'Sidebars', 'manage_options', 'ww-sidebars', 'ww_sidebars_page');
   add_submenu_page( 'edit.php?post_type=widget', 'Debug Widgets', 'Debug', 'manage_options', 'ww-debug', 'ww_debug_page');
 }
 
@@ -90,6 +91,10 @@ function ww_debug_page(){
   //print_r($wp_registered_widget_controls);
   print_r($wp_registered_widgets);
   print "</pre>";
+}
+function ww_sidebars_page()
+{
+  
 }
 /*
  * Handles creation of new cloned widgets, and displays clone new widget page
