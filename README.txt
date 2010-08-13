@@ -11,7 +11,7 @@ A way to manage widgets on a page by page basis. Widgets as post type.
 
 Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis.
 It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
-Has the ability to support multiple 'sidebars' (groups of widgets)
+It has the ability to support multiple 'sidebars' (groups of widgets)
 
 == Installation ==
 
@@ -20,7 +20,7 @@ Has the ability to support multiple 'sidebars' (groups of widgets)
 1. Add a new sidebar under the Widgets menu
 1. Begin adding widgets under the Widgets menu
 1. Set default widgets on the defaults
-1. Add '<?php ww_dynamic_sider('name_of_sidebar'); ?> to your template
+1. Add '<?php ww_dynamic_sidebar('sidebar_slug'); ?> to your template
 
 == Frequently Asked Questions ==
 

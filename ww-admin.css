@@ -9,12 +9,16 @@
   background: #eee; 
 }
 
-li.ww-item {
+li.ww-item,
+li.ww-sidebar-sort-item{
   line-height: 30px;
-  border-bottom: 1px solid #bbb;
-  border-top: 1px solid #eee;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
   margin: 0px;
-  padding: 0px 4px;
+  padding: 0px 4px 0px 12px;
+  background: #fff;
 }
 .ww-widget-weight {
   display: block;
@@ -56,41 +60,36 @@ li.ww-item {
   float: left;
   margin: 0px 0px 0px 24px;
 }
-.ww-clone-widgets li {
-  background-color: #fff;
-  margin: 0px 0px 8px 0px;
-  list-style: none;
-  list-style-type: none;
-  list-style-image: none;
-  list-style-position: outside;
-  border: 1px solid #666;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+
+#ww-sidebar-page ul {
+  width: 350px;
 }
-.ww-clone-widgets h4 {
+.ww-clone-widgets h4,
+#ww-sidebar-page h4 {
   margin: 0px;
-  padding: 6px 12px;
+  padding: 7px 12px;
 }
-.ww-clone-widget-click {
+.ww-sidebar-edit {
   float: right;
   padding: 6px 4px;
   cursor: pointer;
   color:#21759B;
   text-decoration: underline;
 }
-.ww-clone-widget-details{
-  padding: 4px 8px;
-  margin: 3px 4px 4px;
-  display: none;
-  border: 1px solid #bbb;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  background-color: #eee;
+.ww-sidebar-details label {
+  font-family: monospace;
 }
-.ww-clone-submit {
+.ww-sidebar-details .ww-text {
+  width: 84%;
+}
+.ww-clone-submit,
+.ww-sidebar-update-submit{
   display: block;
   width: auto;
-  margin: 0px 0px 0px auto;
+  margin: 4px 0px 0px auto;
+}
+.ww-sidebar-sort-submit {
+  margin-top: 24px;
 }
 .adv-parse-description {
   color: #444;padding-left: 12px;
@@ -102,4 +101,54 @@ li.ww-item {
   list-style-position: inside;
   font: normal 11px Arial;
   color: #555;
+}
+#ww-sidebar-page {
+  width: 98%;
+}
+#ww-sidebar-page td {
+  width: 50%;
+  vertical-align: top;
+}
+#ww-disabled-items,
+.ww-sortable {
+  min-height: 20px;
+  height: auto !important;
+  height: 20px;
+  border: 2px dashed #eee;
+}
+.ww-item select {
+  display: block;
+  float: right;
+  margin: 4px 8% 0px 12px;
+}
+#ww-defaults dt { font-weight: bold; }
+#ww-sidebar-page .description {
+  width: 350px;
+  font: bold 11px/14px monospace;
+  margin-bottom: 12px;
+}
+.widget-title-action {
+  float: right;
+}
+div.widget-action {
+  display: block;
+  height: 26px;
+  width: 26px;
+  cursor: pointer;
+  background:transparent url('/wp-admin/images/menu-bits.gif') no-repeat scroll 0 -110px;
+}
+.widget-inside {
+  display: none;
+  padding: 6px 12px;
+}
+#ww-sidebar-page .widget-top {
+  cursor: default;
+}
+li.ww-sidebar-sort-item {
+  background: #DFDFDF url('/wp-admin/images/gray-grad.png') repeat-x scroll left top;
+  margin-bottom: 2px;
+}
+.ww-sidebar-sort-item,
+.ww-item {
+  cursor: move;
 }

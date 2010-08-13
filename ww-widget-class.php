@@ -8,7 +8,7 @@ var $meta_fields = array("ww-adv-enabled","ww-parse");
   function Widget_Wrangler()
   {
     $labels = array(
-      'name' => _x('Widgets', 'post type general name'),
+      'name' => _x('Widget Wrangler', 'post type general name'),
       'singular_name' => _x('Widget', 'post type singular name'),
       'add_new' => _x('Add New', 'widget'),
       'add_new_item' => __('Add New Widget'),
@@ -16,6 +16,7 @@ var $meta_fields = array("ww-adv-enabled","ww-parse");
       'new_item' => __('New Widget'),
       'view_item' => __('View Widget'),
       'search_items' => __('Search Widgets'),
+      'menu_icon' => WW_PLUGIN_DIR.'/icon-wrangler.png',
       'not_found' =>  __('No widgets found'),
       'not_found_in_trash' => __('No widgets found in Trash'), 
       'parent_item_colon' => ''
@@ -32,7 +33,8 @@ var $meta_fields = array("ww-adv-enabled","ww-parse");
       'hierarchical' => false,
       'rewrite' => array("slug" => "widget"), // Permalinks
       'query_var' => "widget", // This goes to the WP_Query schema
-      'supports' => array('title','excerpt','editor' /*,'custom-fields'*/) // Let's use custom fields for debugging purposes only
+      'supports' => array('title','excerpt','editor' /*,'custom-fields'*/), // Let's use custom fields for debugging purposes only
+      'menu_icon' => WW_PLUGIN_URL.'/images/wrangler_icon.png'
     ));
    
     add_filter("manage_edit-widget_columns", array(&$this, "edit_columns"));
