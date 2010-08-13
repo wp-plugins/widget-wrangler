@@ -145,11 +145,13 @@ function ww_default_page_widgets_brand_new($defaults_array)
                <input name='ww-save-default' type='submit' value='Save' />
                </form>
              </div>";
-             
-  foreach($output['active'] as $sidebar => $unsorted_widgets)
+  if(is_array($output['active']))
   {
-    //print_r($unsorted_widgets);
-    ksort($output['active'][$sidebar]);  
+    foreach($output['active'] as $sidebar => $unsorted_widgets)
+    {
+      //print_r($unsorted_widgets);
+      ksort($output['active'][$sidebar]);  
+    }
   }
   //print_r($output['active']);
   // theme it out
