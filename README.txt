@@ -48,9 +48,9 @@ When you clone a wordpress widget, it creates a new widget post in the Widget Wr
 3. Cloned Wordpress Widget
 
 == Changelog ==
-= 1.0beta =
+= 1.1beta =
 Initial Release
 
 == Upgrade Notice ==
 
-= 1.0beta =
+= 1.1beta =

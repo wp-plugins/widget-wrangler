@@ -6,7 +6,7 @@ Description: Widget Wrangler gives the wordpress admin a clean interface for man
 It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
 Currently only supports one widgets sidebar. 
 Author: Jonathan Daggerhart
-Version: 1.0beta
+Version: 1.1beta
 Author URI: http://www.daggerhart.com
 */
 /*  Copyright 2010  Jonathan Dagegrhart  (email : jonathan@daggerhart.com)
