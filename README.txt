@@ -20,7 +20,7 @@ It has the ability to support multiple 'sidebars' (groups of widgets)
 1. Add a new sidebar under the Widgets menu
 1. Begin adding widgets under the Widgets menu
 1. Set default widgets on the defaults
-1. Add '<?php ww_dynamic_sidebar('sidebar_slug'); ?>' to your template
+1. Add the function 'ww_dynamic_sidebar('sidebar_slug');' to your template
 
 == Frequently Asked Questions ==
 
