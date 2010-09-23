@@ -6,7 +6,7 @@ Description: Widget Wrangler gives the wordpress admin a clean interface for man
 It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
 Currently only supports one widgets sidebar. 
 Author: Jonathan Daggerhart
-Version: 1.1rc1
+Version: 1.1rc2
 Author URI: http://www.daggerhart.com
 */
 /*  Copyright 2010  Jonathan Dagegrhart  (email : jonathan@daggerhart.com)
@@ -284,7 +284,7 @@ function ww_template_widget($widget)
   $templated = ob_get_clean();
   //ob_end_clean();
   
-  return $templated;
+  return do_shortcode($templated);
 }
 /*
  * Handle the advanced parsing for a widget
@@ -294,7 +294,7 @@ function ww_adv_parse_widget($widget)
   global $post;
   $page = $post;
   $pattern = array('/{{title}}/','/{{content}}/');
-  $replace = array($widget->post_title,$widget->post_content);
+  $replace = array($widget->post_title,do_shortcode($widget->post_content));
   $parsed = preg_replace($pattern,$replace,$widget->parse);
   ob_start();
     eval('?>'.$parsed);
@@ -428,6 +428,7 @@ function ww_admin_sidebar_panel($pid)
 {
   // dirty hack to get post id, prob a better way.
   $pid = $_GET['post'];
+  $temp = array();
   if (is_numeric($pid))
   {
     // put into array
@@ -494,7 +495,11 @@ function ww_admin_sidebar_panel($pid)
   if (is_array($all_widgets))
   {
     //foreach($all_widgets as $widget)
-    $output = array_merge(ww_create_widget_list($all_widgets, $active_array, $sidebars), $output);
+    $temp = ww_create_widget_list($all_widgets, $active_array, $sidebars);
+    if(is_array($temp))
+    {
+      $output = array_merge($temp, $output);
+    }
   }
   $output['close'] = " <!-- .inner -->
                </div><!-- .outer -->

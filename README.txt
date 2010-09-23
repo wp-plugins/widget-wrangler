@@ -14,7 +14,11 @@ It also provides widgets as a post type, and the ability to clone existing wordp
 
 It has the ability to support multiple 'sidebars' (groups of widgets)
 
-[Getting Started Screencast] (http://screencast.com/t/YjUwNDM3Zjk)
+== Screencasts ==
+[Getting Started Screencast](http://screencast.com/t/YjUwNDM3Zjk)
+[Basic Examples w/ Advanced Parsing Screencast](http://screencast.com/t/NjI2NDYzY)
+[Templating & PHP](http://screencast.com/t/YmI2Mjg1NT)
+
 
 == Installation ==
 
@@ -51,6 +55,10 @@ When you clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Cloned Wordpress Widget
 
 == Changelog ==
+= 1.1rc2 =
+
+* Found another important bug related to recent changes. 
+
 = 1.1rc1 =
 
 * Fixed bug where disabled widgets disappear
@@ -62,4 +70,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-Multiple critical bug fixes.
+Multiple critical bug fixes.  Please upgrade to 1.1rc2

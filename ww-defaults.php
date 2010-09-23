@@ -72,6 +72,7 @@ function ww_save_default_widgets($posted)
 function ww_default_page_widgets($defaults_array)
 {
   //global $defaults_array;
+  $temp = array();
   $widgets = ww_get_all_widgets();
   $sidebars = ww_get_all_sidebars();
   //print_r($sidebars);
@@ -92,7 +93,10 @@ function ww_default_page_widgets($defaults_array)
   {
     //foreach($all_widgets as $widget)
     $temp = ww_create_widget_list($widgets, $defaults_array, $sidebars);
-    $output = array_merge($temp, $output);
+    if(is_array($temp))
+    {
+      $output = array_merge($temp, $output);
+    }
   }
   
   $output['close'] = " <!-- .inner -->
