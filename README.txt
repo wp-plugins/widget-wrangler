@@ -10,9 +10,10 @@ A way to manage widgets on a page by page basis. Widgets as post type.
 == Description ==
 
 Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis.
+It's basically Drupal Blocks, but on every page, with the ability to set the widgets to default to certain 'regions'.
 It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
 
-It has the ability to support multiple 'sidebars' (groups of widgets)
+It has the ability to support multiple 'sidebars' (groups of widgets, regions).
 
 Screencasts
 1. [Getting Started Screencast](http://screencast.com/t/YjUwNDM3Zjk)
