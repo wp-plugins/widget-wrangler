@@ -16,9 +16,9 @@ It also provides widgets as a post type, and the ability to clone existing wordp
 It has the ability to support multiple 'sidebars' (groups of widgets, regions).
 
 Screencasts
-1. [Getting Started Screencast](http://screencast.com/t/YjUwNDM3Zjk)
-1. [Basic Examples w/ Advanced Parsing Screencast](http://screencast.com/t/NjI2NDYzY)
-1. [Templating & PHP](http://screencast.com/t/YmI2Mjg1NT)
+* [Getting Started Screencast](http://screencast.com/t/YjUwNDM3Zjk)
+* [Basic Examples w/ Advanced Parsing Screencast](http://screencast.com/t/NjI2NDYzY)
+* [Templating & PHP](http://screencast.com/t/YmI2Mjg1NT)
 
 
 == Installation ==
