@@ -12,7 +12,7 @@ function ww_theme_defaults_page()
   print "<div class='wrap'>
           <h2>Default Widgets</h2>
           <p>Set the default widgets for your sidebar.</p>";
-          ww_default_page_widgets_brand_new($defaults_array);
+          ww_default_page_widgets($defaults_array);
   print "</div>";
 }
 /*
@@ -69,15 +69,15 @@ function ww_save_default_widgets($posted)
 /*
  * Retrieve and theme the widgets on the Default Widgets Page
  */
-function ww_default_page_widgets_brand_new($defaults_array)
+function ww_default_page_widgets($defaults_array)
 {
   //global $defaults_array;
   $widgets = ww_get_all_widgets();
   $sidebars = ww_get_all_sidebars();
-  
+  //print_r($sidebars);
   //print_r($widgets);
   //print_r($sidebars);
-  //print_r($defaults);
+  //print_r($defaults_ARRAY);
  
   $output = array();
   $output['open'] = "
@@ -88,56 +88,11 @@ function ww_default_page_widgets_brand_new($defaults_array)
                 <input type='hidden' name='ww_noncename' id='ww_noncename' value='" . wp_create_nonce( plugin_basename(__FILE__) ) . "' />";
   
   $i = 1;
-  foreach($widgets as $widget)
+  if (is_array($widgets) && count($sidebars) > 0)
   {
-    $keys = array_searchRecursive($widget->ID, $defaults_array);
-    // $keys[0] = sidebar slug
-    if ($keys[0])
-    {
-      $sidebar_slug = $keys[0];
-      //$keys[1] = specific widget array
-      $weight = $defaults_array[$sidebar_slug][$keys[1]]['weight'];
-      
-      //print $widget->post_name." / ".$weight." - weight <br>";
-      
-      // build select box
-      $sidebars_options = "<option value='disabled'>Disabled</option>";
-      foreach($sidebars as $slug => $sidebar)
-      {
-        ($slug == $sidebar_slug) ? $selected = "selected='selected'" : $selected = '';
-        $sidebars_options.= "<option name='".$slug."' value='".$slug."' ".$selected.">".$sidebar."</option>";   
-      }
-      
-      $output['active'][$sidebar_slug][$weight] = "<li class='ww-item nojs' width='100%'>
-                                      <input class='ww-widget-weight' name='ww-".$widget->post_name."-weight' type='text' size='2' value='$weight' />
-                                      <select name='ww-".$widget->post_name."-sidebar'>
-                                      ".$sidebars_options."
-                                      </select>
-                                      <input class='ww-widget-name' name='ww-".$widget->post_name."' type='hidden' value='".$widget->post_name."' />
-                                      <input class='ww-widget-id' name='ww-id-".$widget->ID."' type='hidden' value='".$widget->ID."' />
-                                      ".$widget->post_title."
-                                    </li>";
-    }
-    else
-    {
-      $sidebars_options = "<option value='disabled' selected>Disabled</option>";
-      foreach($sidebars as $slug => $sidebar)
-      {
-        $sidebars_options.= "<option name='".$slug."'value='".$slug."'>".$sidebar."</option>";   
-      }
-      
-      $output['disabled'][] = "<li class='ww-item disabled nojs' width='100%'>
-                                <input class='ww-widget-weight' name='ww-".$widget->post_name."-weight' type='text' size='2' value='$weight' disabled='disabled' />
-                                <select name='ww-".$widget->post_name."-sidebar'>
-                                ".$sidebars_options."
-                                </select>
-                                <input class='ww-widget-name' name='ww-".$widget->post_name."' type='hidden' size='2' value='".$widget->post_name."' />
-                                      <input class='ww-widget-it' name='ww-id-".$widget->ID."' type='hidden' value='".$widget->ID."' />
-                                ".$widget->post_title." 
-                              </li>";
-    }
-    $i++;
-    //print_r($widget);
+    //foreach($all_widgets as $widget)
+    $temp = ww_create_widget_list($widgets, $defaults_array, $sidebars);
+    $output = array_merge($temp, $output);
   }
   
   $output['close'] = " <!-- .inner -->

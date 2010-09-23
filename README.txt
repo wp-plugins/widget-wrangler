@@ -11,7 +11,10 @@ A way to manage widgets on a page by page basis. Widgets as post type.
 
 Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis.
 It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
+
 It has the ability to support multiple 'sidebars' (groups of widgets)
+
+[Getting Started Screencast] (http://screencast.com/t/YjUwNDM3Zjk)
 
 == Installation ==
 
@@ -44,13 +47,19 @@ When you clone a wordpress widget, it creates a new widget post in the Widget Wr
 == Screenshots ==
 
 1. Widget Page Manager
-2. Individual Widget
-3. Cloned Wordpress Widget
+1. Individual Widget
+1. Cloned Wordpress Widget
 
 == Changelog ==
+= 1.1rc1 =
+
+* Fixed bug where disabled widgets disappear
+* Fixed the need to save multiple times when enabling widgets
+* Fixed disappearance of widgets assigned to deleted sidebars
+
 = 1.1beta =
 Initial Release
 
 == Upgrade Notice ==
 
-= 1.1beta =
+Multiple critical bug fixes.

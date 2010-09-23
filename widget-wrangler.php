@@ -6,7 +6,7 @@ Description: Widget Wrangler gives the wordpress admin a clean interface for man
 It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
 Currently only supports one widgets sidebar. 
 Author: Jonathan Daggerhart
-Version: 1.1beta
+Version: 1.1rc1
 Author URI: http://www.daggerhart.com
 */
 /*  Copyright 2010  Jonathan Dagegrhart  (email : jonathan@daggerhart.com)
@@ -121,9 +121,9 @@ function ww_debug_page(){
   //global $wp_registered_widgets, $wp_registered_widget_controls, $wp_registered_widget_updates, $_wp_deprecated_widgets_callbacks;
   global $wp_widget_factory,$wp_registered_widgets;
   print "<pre>";
-  print_r($wp_widget_factory);
+  //print_r($wp_widget_factory);
   //print_r($wp_registered_widget_controls);
-  print_r($wp_registered_widgets);
+  //print_r($wp_registered_widgets);
   print "</pre>";
 }
 function ww_sidebars_page()
@@ -490,17 +490,57 @@ function ww_admin_sidebar_panel($pid)
                 <div class='outer'>
                   <input value='true' type='hidden' name='widget-wrangler-edit' />
                   <input type='hidden' name='ww_noncename' id='ww_noncename' value='" . wp_create_nonce( plugin_basename(__FILE__) ) . "' />";
-  $i = 1;
-  foreach($all_widgets as $widget)
+
+  if (is_array($all_widgets))
   {
-    $keys = array_searchRecursive($widget->ID, $active_array);
-    
-    // $keys[0] = sidebar slug
-    if ($keys[0])
+    //foreach($all_widgets as $widget)
+    $output = array_merge(ww_create_widget_list($all_widgets, $active_array, $sidebars), $output);
+  }
+  $output['close'] = " <!-- .inner -->
+               </div><!-- .outer -->
+               </form>
+             </div>";
+  
+  if ($output['active'])
+  {
+    foreach($output['active'] as $sidebar => $unsorted_widgets)
     {
+      //print_r($unsorted_widgets);
+      if ($output['active'][$sidebar])
+      {
+        ksort($output['active'][$sidebar]);
+      }
+    }
+  }
+  //print_r($output['active']);
+  // theme it out
+  ww_theme_page_edit($output);
+  }  
+}
+
+function ww_create_widget_list($widgets, $ref_array, $sidebars)
+{
+    
+    $i = 1;
+    foreach($widgets as $widget)
+    {
+      $temp = array();
+      $keys = array_searchRecursive($widget->ID, $ref_array);
+      //print_r($keys);
+      //print array_key_exists($keys[0], $sidebars);
+      // $keys[0] = sidebar slug
+      if ($keys[0] == '' || (!array_key_exists($keys[0], $sidebars)))
+      {
+        $keys[0] = "disabled";
+      }
+      
+      // setup initial info
       $sidebar_slug = $keys[0];
-      //$keys[1] = specific widget array
-      $weight = $active_array[$sidebar_slug][$keys[1]]['weight'];
+      ($sidebar_slug == 'disabled') ? $disabled = "disabled='disabled'" : $disabled = '';
+      // get weight
+        //$keys[1] = specific widget array
+      $weight = $ref_array[$sidebar_slug][$keys[1]]['weight'];
+      
       
       // build select box
       $sidebars_options = "<option value='disabled'>Disabled</option>";
@@ -510,8 +550,8 @@ function ww_admin_sidebar_panel($pid)
         $sidebars_options.= "<option name='".$slug."' value='".$slug."' ".$selected.">".$sidebar."</option>";   
       }
       
-      $output['active'][$sidebar_slug][$weight] = "<li class='ww-item nojs' width='100%'>
-                                      <input class='ww-widget-weight' name='ww-".$widget->post_name."-weight' type='text' size='2' value='$weight' />
+      $temp[$weight] = "<li class='ww-item ".$sidebar_slug." nojs' width='100%'>
+                                      <input class='ww-widget-weight' name='ww-".$widget->post_name."-weight' type='text' size='2' value='$weight' $disabled />
                                       <select name='ww-".$widget->post_name."-sidebar'>
                                       ".$sidebars_options."
                                       </select>
@@ -519,43 +559,19 @@ function ww_admin_sidebar_panel($pid)
                                       <input class='ww-widget-id' name='ww-id-".$widget->ID."' type='hidden' value='".$widget->ID."' />
                                       ".$widget->post_title."
                                     </li>";
-    }
-    else
-    {
-      $sidebars_options = "<option value='disabled' selected>Disabled</option>";
-      foreach($sidebars as $slug => $sidebar)
+      // place into output array
+      if ($sidebar_slug == 'disabled')
       {
-        $sidebars_options.= "<option name='".$slug."'value='".$slug."'>".$sidebar."</option>";   
+        $output['disabled'][] = $temp[$weight];
+      }
+      else
+      {
+        $output['active'][$sidebar_slug][$weight] = $temp[$weight];
       }
       
-      $output['disabled'][] = "<li class='ww-item disabled nojs' width='100%'>
-                                <input class='ww-widget-weight' name='ww-".$widget->post_name."-weight' type='text' size='2' value='$weight' />
-                                <select name='ww-".$widget->post_name."-sidebar'>
-                                ".$sidebars_options."
-                                </select>
-                                <input class='ww-widget-name' name='ww-".$widget->post_name."' type='hidden' size='2' value='".$widget->post_name."' />
-                                      <input class='ww-widget-it' name='ww-id-".$widget->ID."' type='hidden' value='".$widget->ID."' />
-                                ".$widget->post_title." 
-                               </li>";
+      $i++;
     }
-    $i++;
-    //print_r($widget);
-  }
-  
-  $output['close'] = " <!-- .inner -->
-               </div><!-- .outer -->
-               </form>
-             </div>";
-             
-  foreach($output['active'] as $sidebar => $unsorted_widgets)
-  {
-    //print_r($unsorted_widgets);
-    ksort($output['active'][$sidebar]);  
-  }
-  //print_r($output['active']);
-  // theme it out
-  ww_theme_page_edit($output);
-  }  
+    return $output;
 }
 /*
  * Make sure to show our plugin on the admin screen

@@ -22,7 +22,7 @@ jQuery(function(){
     jQuery.each(lists, function(){
       var this_list = jQuery(this).children(".ww-item");
         jQuery.each(this_list, function(i){
-          jQuery(this).children(".ww-widget-weight").val(i+1);
+          jQuery(this).children(".ww-widget-weight").val(i+1).attr("disabled","");
         });
     });
   }
