@@ -6,7 +6,7 @@ Requires at least: 3
 Tested up to: 3.0.1
 Stable tag: trunk
 
-A way to manage widgets on a page by page basis. Widgets as post type.
+A plugin for managing the display of widgets on a page by page basis. Widgets as post type.
 
 == Description ==
 
