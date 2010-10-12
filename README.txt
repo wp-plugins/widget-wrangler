@@ -62,6 +62,11 @@ When you clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Cloned Wordpress Widget
 
 == Changelog ==
+
+= 1.1rc4 =
+
+* Bug fix from rc3 changes.   Capability for access to submenus corrected.
+
 = 1.1rc3 =
 
 * Added 'Auto Paragraph' checkbox for each widget
@@ -82,4 +87,5 @@ Initial Release
 
 == Upgrade Notice ==
 
+RC3 is bugged with a cpability  issue, upgrade to RC4.
 Additional features: Configurable capability_type & Automatic Paragraph support 
