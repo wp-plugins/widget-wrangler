@@ -1,5 +1,6 @@
 === Widget Wrangler ===
 Contributors: daggerhart
+Donate link: http://www.daggerhart.com/widget-wrangler#donate
 Tags: widget, admin, widgets, administration, sidebar
 Requires at least: 3
 Tested up to: 3.0.1
@@ -9,13 +10,13 @@ A way to manage widgets on a page by page basis. Widgets as post type.
 
 == Description ==
 
-Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis.
-It's basically Drupal Blocks, but on every page, with the ability to set the widgets to default to certain 'regions'.
-It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
-
-It has the ability to support multiple 'sidebars' (groups of widgets, regions).
+Widget Wrangler is a plugin for Wordpress that gives admin a clean interface for managing widgets on a page by page basis.
+It's basically Drupal Blocks on every page, with the ability to set the default location of the widgets in specific sidebars.
+Widget Wrangler provides widgets as a post type, gives you the ability to clone existing wordpress widgets, and provides shortcode support for individual widgets.
+Now with multiple 'sidebars' (groups of widgets, drupal: regions)!
 
 Screencasts
+
 * [Getting Started Screencast](http://screencast.com/t/YjUwNDM3Zjk)
 * [Basic Examples w/ Advanced Parsing Screencast](http://screencast.com/t/NjI2NDYzY)
 * [Templating & PHP](http://screencast.com/t/YmI2Mjg1NT)
@@ -31,6 +32,11 @@ Screencasts
 1. Add the function 'ww_dynamic_sidebar('sidebar_slug');' to your template
 
 == Frequently Asked Questions ==
+
+= How do I display a single widget within a Page's content? =
+
+Widget Wrangler comes with built in shortcode support for each widget.  To show a single widget in a content area, use the shortcode pattern of [ww_widget id={post_id}].
+ie. [ww_widget id=240] where 240 is the post_id of the widget.
 
 = How do I display my widgets? =
 
@@ -56,6 +62,11 @@ When you clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Cloned Wordpress Widget
 
 == Changelog ==
+= 1.1rc3 =
+
+* Added 'Auto Paragraph' checkbox for each widget
+* Added a basic level of capability control.  Now possible to change capability type for use with other plugins.
+
 = 1.1rc2 =
 
 * Found another important bug related to recent changes. 
@@ -71,4 +82,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-Multiple critical bug fixes.  Please upgrade to 1.1rc2
+Additional features: Configurable capability_type & Automatic Paragraph support 

@@ -152,3 +152,12 @@ li.ww-sidebar-sort-item {
 .ww-item {
   cursor: move;
 }
+.ww-settings-cap {
+  padding: 10px 20px;
+  margin: 6px 0px;
+  background-color: #fff;
+  border: 1px solid #bbb;
+}
+.ww-settings-roles {
+  padding: 8px 24px;
+}

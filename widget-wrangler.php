@@ -6,7 +6,7 @@ Description: Widget Wrangler gives the wordpress admin a clean interface for man
 It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
 Currently only supports one widgets sidebar. 
 Author: Jonathan Daggerhart
-Version: 1.1rc2
+Version: 1.1rc3
 Author URI: http://www.daggerhart.com
 */
 /*  Copyright 2010  Jonathan Dagegrhart  (email : jonathan@daggerhart.com)
@@ -54,20 +54,39 @@ function Widget_Wrangler_Init() {
  */
 function ww_admin_init()
 {
-  // Add panels into the editing sidebar(s)
-  add_meta_box('ww_admin_meta_box', __('Widget Wrangler'), 'ww_admin_sidebar_panel', 'page', 'normal', 'high');
-  add_action('admin_head', 'ww_adjust_css');
-  // Add some CSS to the admin header
-  if ($_REQUEST['action'] == 'edit' ||
-      $_GET['page'] == 'ww-defaults'||
-      $_GET['page'] == 'ww-debug'   ||
-      $_GET['page'] == 'ww-new'     ||
-      $_GET['page'] == 'ww-clone'     ||
-      $_GET['page'] == 'ww-sidebars')
+  $settings = ww_get_settings();
+  $show_panel = false;
+  
+  if ($settings['capabilities'] == 'roles')
   {
-    add_action('admin_head', 'ww_admin_js');
-    add_action('admin_head', 'ww_admin_css');
+    if (current_user_can('manage_widgets'))
+    {
+      $show_panel = true;
+    }
   }
+  else
+  {
+    $show_panel = true;
+  }
+  
+  if ($show_panel)
+  {  
+    // Add panels into the editing sidebar(s)
+    add_meta_box('ww_admin_meta_box', __('Widget Wrangler'), 'ww_admin_sidebar_panel', 'page', 'normal', 'high');
+    // Add some CSS to the admin header
+    if ($_REQUEST['action'] == 'edit' ||
+        $_GET['page'] == 'ww-defaults'||
+        $_GET['page'] == 'ww-debug'   ||
+        $_GET['page'] == 'ww-new'     ||
+        $_GET['page'] == 'ww-clone'     ||
+        $_GET['page'] == 'ww-sidebars')
+    {
+      add_action('admin_head', 'ww_admin_js');
+      add_action('admin_head', 'ww_admin_css');
+    }
+  }
+  
+  add_action('admin_head', 'ww_adjust_css');
   //disable autosave
   //wp_deregister_script('autosave');
 }
@@ -76,10 +95,11 @@ function ww_admin_init()
  */
 function ww_menu()
 {
-  add_submenu_page( 'edit.php?post_type=widget', 'Widget Sidebars', 'Sidebars', 'manage_options', 'ww-sidebars', 'ww_sidebars_page');
-  add_submenu_page( 'edit.php?post_type=widget', 'Default Widgets', 'Set Defaults', 'manage_options', 'ww-defaults', 'ww_defaults_page');
-  add_submenu_page( 'edit.php?post_type=widget', 'Default Widgets', 'Clone WP Widget', 'manage_options', 'ww-clone', 'ww_clone_page');
-  //add_submenu_page( 'edit.php?post_type=widget', 'Debug Widgets', 'Debug', 'manage_options', 'ww-debug', 'ww_debug_page');
+  add_submenu_page( 'edit.php?post_type=widget', 'Widget Sidebars', 'Sidebars', 'manage_widgets', 'ww-sidebars', 'ww_sidebars_page');
+  add_submenu_page( 'edit.php?post_type=widget', 'Default Widgets', 'Set Defaults', 'manage_widgets', 'ww-defaults', 'ww_defaults_page');
+  add_submenu_page( 'edit.php?post_type=widget', 'Clone WP Widget', 'Clone WP Widget', 'manage_widgets', 'ww-clone', 'ww_clone_page');
+  add_submenu_page( 'edit.php?post_type=widget', 'Settings', 'Settings', 'manage_options', 'ww-settings', 'ww_settings_page');
+//add_submenu_page( 'edit.php?post_type=widget', 'Debug Widgets', 'Debug', 'manage_options', 'ww-debug', 'ww_debug_page');
 }
 
 /*
@@ -113,6 +133,13 @@ function ww_admin_css()
 {
 	print '<link rel="stylesheet" type="text/css" href="'.WW_PLUGIN_URL.'/ww-admin.css" />';
 }
+/*
+ * Helper function for making sidebar slugs
+ */
+function ww_make_slug($string)
+{
+  return stripcslashes(preg_replace('/[\s_\'\"]/','_', strtolower(strip_tags($string))));
+}
 
 /*
  * for whatever.
@@ -126,6 +153,10 @@ function ww_debug_page(){
   //print_r($wp_registered_widgets);
   print "</pre>";
 }
+
+/* * * * * * * *
+ * Page handling
+ */
 function ww_sidebars_page()
 {
   include WW_PLUGIN_DIR.'/ww-sidebars.php';
@@ -172,6 +203,28 @@ function ww_clone_page()
   }
 }
 /*
+ * Handles settings page
+ */
+function ww_settings_page()
+{
+  include WW_PLUGIN_DIR.'/ww-settings.php';
+  if ($_GET['ww-settings-action'])
+  {
+    switch($_GET['ww-settings-action'])
+    {
+      case "save":
+        ww_save_settings($_POST);
+        break;
+    }
+    wp_redirect(get_bloginfo('wpurl').'/wp-admin/edit.php?post_type=widget&page=ww-settings');  
+  }
+  else
+  {
+    ww_edit_settings_page();    
+  }
+}
+
+/*
  * Produce the Default Widgets Page
  */
 function ww_defaults_page()
@@ -194,11 +247,7 @@ function ww_defaults_page()
     ww_theme_defaults_page();
   }
 }
-
-function ww_make_slug($string)
-{
-  return stripcslashes(preg_replace('/[\s_\'\"]/','_', strtolower(strip_tags($string))));
-}
+/* end page handling */
 
 /*
  * Returns all published widgets
@@ -221,10 +270,12 @@ function ww_get_all_widgets()
   {
     $widgets[$i]->adv_enabled = get_post_meta($widgets[$i]->ID,'ww-adv-enabled',TRUE);
     $widgets[$i]->parse = get_post_meta($widgets[$i]->ID,'ww-parse', TRUE);
+    $widgets[$i]->wpautop = get_post_meta($widgets[$i]->ID,'ww-wpautop', TRUE);
     $i++;
   }
   return $widgets;
 }
+
 /*
  * Retrieve and return a single widget by it's ID
  */
@@ -241,8 +292,13 @@ function ww_get_single_widget($post_id){
   $widget = $wpdb->get_row($query);
   $widget->adv_enabled = get_post_meta($widget->ID,'ww-adv-enabled',TRUE);
   $widget->parse = get_post_meta($widget->ID,'ww-parse', TRUE);
+  $widget->wpautop = get_post_meta($widget->ID,'ww-wpautop', TRUE);
   return $widget;
 }
+
+/*
+ * Shortcode support for all widgets
+ */
 function ww_single_widget_shortcode($atts)
 {
   $short_array = shortcode_atts(array('id' => ''), $atts);
@@ -252,11 +308,20 @@ function ww_single_widget_shortcode($atts)
   return ww_theme_single_widget($widget);
 }
 add_shortcode('ww_widget','ww_single_widget_shortcode');
+
 /*
  * Apply templating and parsing to a single widget
  */
 function ww_theme_single_widget($widget)
 {
+  // maybe they don't want auto p ?
+  if ($widget->wpautop == "on")
+  {
+    $widget->post_content = wpautop($widget->post_content);
+  }
+  // apply shortcode
+  $widget->post_content = do_shortcode($widget->post_content);  
+  
   //print_r($widget);
   if($widget->adv_enabled)
   {
@@ -282,10 +347,10 @@ function ww_template_widget($widget)
     include WW_PLUGIN_DIR. '/widget-template.php';
   }
   $templated = ob_get_clean();
-  //ob_end_clean();
   
-  return do_shortcode($templated);
+  return $templated;
 }
+
 /*
  * Handle the advanced parsing for a widget
  */
@@ -294,13 +359,17 @@ function ww_adv_parse_widget($widget)
   global $post;
   $page = $post;
   $pattern = array('/{{title}}/','/{{content}}/');
-  $replace = array($widget->post_title,do_shortcode($widget->post_content));
+  $replace = array($widget->post_title, $widget->post_content);
   $parsed = preg_replace($pattern,$replace,$widget->parse);
   ob_start();
     eval('?>'.$parsed);
     $output = ob_get_clean();
   return $output;
 }
+
+/*
+ * Retrieve list of sidebars
+ */
 function ww_get_all_sidebars()
 {
   if ($sidebars_string = get_option('ww_sidebars'))
@@ -313,6 +382,10 @@ function ww_get_all_sidebars()
   }
   return $sidebars_array;
 }
+
+/*
+ * Output a sidebar
+ */
 function ww_dynamic_sidebar($sidebar_slug = 'default')
 {
   // get the post and sidebars
@@ -334,6 +407,7 @@ function ww_dynamic_sidebar($sidebar_slug = 'default')
     else
     {
       // no widgets in post and no defaults
+      return;
     }
   }
   if (is_array($widgets_array[$sidebar_slug]))
@@ -355,74 +429,9 @@ function ww_dynamic_sidebar($sidebar_slug = 'default')
   }
   print $output;
 }
-// helps find the weight.. or something
-function ww_cmp($a,$b) {
-if ($a['weight'] == $b['weight']) return 0;
-return ($a['weight'] < $b['weight'])? -1 : 1;
-}
 
 /*
- * Display the widgets for this page
- */
-function ww_display_widgets()
-{
-  global $post;
-  $output = '';
-  
-  // lets get that custom field and break it into pieces
-  if ($widgets_string = get_post_meta($post->ID, 'ww_post_widgets',TRUE))
-  {
-    $selected_widgets = ww_decode_widgets($widgets_string);
-    /*
-     * Run the functions / widgets
-     */ 
-    foreach($selected_widgets as $order => $wid)
-    {
-      $widget = ww_get_single_widget($wid);
-      $output .= ww_theme_single_widget($widget);
-    }
-  }
-  else
-  {
-    /*
-     * Default widgets
-     */
-    $default_widgets = get_option('ww_default_widgets');
-    $default_widgets = unserialize($default_widgets);
-    //print_r($default_widgets);
-    foreach ($default_widgets as $order => $wid)
-    {
-      $widget = ww_get_single_widget($wid);
-      $output .= ww_theme_single_widget($widget);
-    }
-  }
-  print $output;
-}
-/*
- * Decode the widget strings
- */
-function ww_decode_widgets($widgets_string = '')
-{
-  $sorted_widgets = array();
-  /*
-   * Take the comma separated list and 'explode' it into an array
-   * Order of widgets is determined by order of input
-   */
-  $ww_widgets = explode(',',$widgets_string);
-  // now foreach item in this array, lets see if we have a wigdet to show	
-  foreach ($ww_widgets as $widget)
-  {
-    $temp = explode(':',$widget);
-    // var[weight] = name
-    $sorted_widgets[$temp[0]] = $temp[1];
-  }
-  ksort($sorted_widgets);
-  //print_r($sorted_widgets);
-  return $sorted_widgets;
-
-}
-/*
- * Provide exploding widget selection when editing a page
+ * Provide Widget Wrangler selection when editing a page
  */
 function ww_admin_sidebar_panel($pid)
 {
@@ -437,7 +446,7 @@ function ww_admin_sidebar_panel($pid)
     
     $sorted_widgets = array();
     
-    //get post meta for this post
+    // get post meta for this post
     // array of chosen widgets //get post meta for this post
     if ($active = get_post_meta($pid,'ww_post_widgets',TRUE))
     {
@@ -494,7 +503,6 @@ function ww_admin_sidebar_panel($pid)
 
   if (is_array($all_widgets))
   {
-    //foreach($all_widgets as $widget)
     $temp = ww_create_widget_list($all_widgets, $active_array, $sidebars);
     if(is_array($temp))
     {
@@ -517,12 +525,15 @@ function ww_admin_sidebar_panel($pid)
       }
     }
   }
-  //print_r($output['active']);
+  
   // theme it out
   ww_theme_page_edit($output);
   }  
 }
 
+/*
+ * Put all widgets into a list for output
+ */
 function ww_create_widget_list($widgets, $ref_array, $sidebars)
 {
     
@@ -531,9 +542,7 @@ function ww_create_widget_list($widgets, $ref_array, $sidebars)
     {
       $temp = array();
       $keys = array_searchRecursive($widget->ID, $ref_array);
-      //print_r($keys);
-      //print array_key_exists($keys[0], $sidebars);
-      // $keys[0] = sidebar slug
+      
       if ($keys[0] == '' || (!array_key_exists($keys[0], $sidebars)))
       {
         $keys[0] = "disabled";
@@ -578,6 +587,7 @@ function ww_create_widget_list($widgets, $ref_array, $sidebars)
     }
     return $output;
 }
+
 /*
  * Make sure to show our plugin on the admin screen
  */
@@ -646,7 +656,7 @@ function ww_theme_page_edit($output)
  */
 function ww_save_post($id)
 {
-    // verify this came from the our screen and with proper authorization,
+  // verify this came from the our screen and with proper authorization,
   // because save_post can be triggered at other times
 
   if ( !wp_verify_nonce( $_POST['ww_noncename'], plugin_basename(__FILE__) )) {
@@ -672,11 +682,9 @@ function ww_save_post($id)
   // OK, we're authenticated: we need to find and save the data
 
   $all_widgets = ww_get_all_widgets();
-  //$weight = 1;
+  
   $i = 1;
- // print_r($posted);
- // exit;
-  //print_r($posted);
+
   foreach($all_widgets as $key => $widget)
   {
     $name = $_POST["ww-".$widget->post_name];
@@ -716,7 +724,38 @@ function ww_save_post($id)
   }
 }
 
+/*
+ * Settings
+ */
+function ww_get_settings()
+{
+  if ($settings = get_option("ww_settings"))
+  {
+    return unserialize($settings);
+  }
+  else
+  {
+    ww_set_default_settings();
+  }
+}
 
+function ww_set_default_settings()
+{
+  $settings["capabilities"] = "simple";
+  
+  update_option("ww_settings", serialize($settings));
+}
+
+/*
+ * Extra helper functions I likely stole from somewhere
+ */
+// helps find the weight.. or something
+function ww_cmp($a,$b) {
+  if ($a['weight'] == $b['weight']) return 0;
+  return ($a['weight'] < $b['weight'])? -1 : 1;
+}
+
+// recursive array search
 function array_searchRecursive( $needle, $haystack, $strict=false, $path=array() )
 {
     if( !is_array($haystack) ) {
@@ -734,3 +773,59 @@ function array_searchRecursive( $needle, $haystack, $strict=false, $path=array()
     }
     return false;
 }
+
+/*
+ * DEPRICATED
+ * Display the widgets for this page
+ *
+function ww_display_widgets()
+{
+  global $post;
+  $output = '';
+  
+  // lets get that custom field and break it into pieces
+  if ($widgets_string = get_post_meta($post->ID, 'ww_post_widgets',TRUE))
+  {
+    $selected_widgets = ww_decode_widgets($widgets_string);
+    
+    // Run the functions / widgets 
+    foreach($selected_widgets as $order => $wid)
+    {
+      $widget = ww_get_single_widget($wid);
+      $output .= ww_theme_single_widget($widget);
+    }
+  }
+  else
+  {
+    // Default widgets
+    $default_widgets = get_option('ww_default_widgets');
+    $default_widgets = unserialize($default_widgets);
+    //print_r($default_widgets);
+    foreach ($default_widgets as $order => $wid)
+    {
+      $widget = ww_get_single_widget($wid);
+      $output .= ww_theme_single_widget($widget);
+    }
+  }
+  print $output;
+}
+
+// Decode the widget strings
+function ww_decode_widgets($widgets_string = '')
+{
+  $sorted_widgets = array();
+  // Take the comma separated list and 'explode' it into an array
+  // Order of widgets is determined by order of input
+  $ww_widgets = explode(',',$widgets_string);
+  // now foreach item in this array, lets see if we have a wigdet to show	
+  foreach ($ww_widgets as $widget)
+  {
+    $temp = explode(':',$widget);
+    // var[weight] = name
+    $sorted_widgets[$temp[0]] = $temp[1];
+  }
+  ksort($sorted_widgets);
+  //print_r($sorted_widgets);
+  return $sorted_widgets;
+}
+ */

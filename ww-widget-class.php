@@ -1,12 +1,21 @@
 <?php
 class Widget_Wrangler {
-var $meta_fields = array("ww-adv-enabled","ww-parse");
-  
+var $meta_fields = array("ww-adv-enabled","ww-parse","ww-wpautop");
+var $settings = array();
+var $capability_type = "post";
+    
   /*
    * Constructor, build the new post type
    */
   function Widget_Wrangler()
   {
+    $settings = ww_get_settings();
+    // allow for custom capability type
+    if ($settings['capabilities'] == "advanced" && $settings['advanced'] != "")
+    {
+      $capability_type = $settings['advanced'];
+    }
+
     $labels = array(
       'name' => _x('Widget Wrangler', 'post type general name'),
       'singular_name' => _x('Widget', 'post type singular name'),
@@ -29,7 +38,7 @@ var $meta_fields = array("ww-adv-enabled","ww-parse");
       'show_ui' => true, // UI in admin panel
       '_builtin' => false, // It's a custom post type, not built in
       '_edit_link' => 'post.php?post=%d',
-      'capability_type' => 'post',
+      'capability_type' => $capability_type,
       'hierarchical' => false,
       'rewrite' => array("slug" => "widget"), // Permalinks
       'query_var' => "widget", // This goes to the WP_Query schema
@@ -126,7 +135,7 @@ var $meta_fields = array("ww-adv-enabled","ww-parse");
   function admin_init() 
   {
     // Custom meta boxes for the edit widget screen
-    add_meta_box("ww-parse", "Advanced Parsing", array(&$this, "meta_parse"), "widget", "normal", "high");
+    add_meta_box("ww-parse", "Options", array(&$this, "meta_parse"), "widget", "normal", "high");
   }
   
   // Admin post meta contents
@@ -136,19 +145,30 @@ var $meta_fields = array("ww-adv-enabled","ww-parse");
     $custom = get_post_custom($post->ID);
     $parse = $custom["ww-parse"][0];
     $adv_enabled = $custom["ww-adv-enabled"][0];
-    (isset($adv_enabled)) ? $checked = 'checked' : $checked = '';
+    $wpautop = $custom["ww-wpautop"][0];
+    
+    (isset($adv_enabled)) ? $adv_checked = 'checked' : $adv_checked = '';
+    // default to checked upon creation
+    (isset($wpautop) || (($_GET['action'] == null) && ($_GET['post_type'] == 'widget'))) ? $wpautop_checked = 'checked' : $wpautop_checked = '';
+    
     ?><div id="template">
-        <label><input type="checkbox" name="ww-adv-enabled" <?php print $checked; ?> /> Enable Advanced Parsing</label>
-        <br />
-        <textarea name="ww-parse" cols="40" rows="16" style="width: 100%;"><?php print $parse; ?></textarea>
-        <div class="adv-parse-description">
-          <h5>Here you can:</h5>
-          <ul>
-            <li>Use PHP</li>
-            <li>Use {{title}} and {{content}} tags to insert the widget's title or content</li>
-            <li>Access the $post object for data concerning the page being displayed</li>
-            <li>Access the $widget object for more widget data</li>
-          </ul>
+        <div>
+          <label><input type="checkbox" name="ww-wpautop" <?php print $wpautop_checked; ?> /> Automatically add Paragraphs to this Widget's Content</label>
+        </div>
+        <div>
+          <h4>Advanced Parsing</h4>
+          <label><input type="checkbox" name="ww-adv-enabled" <?php print $adv_checked; ?> /> Enable Advanced Parsing</label>
+          <br />
+          <textarea name="ww-parse" cols="40" rows="16" style="width: 100%;"><?php print $parse; ?></textarea>
+          <div class="adv-parse-description">
+            <h5>Here you can:</h5>
+            <ul>
+              <li>Use PHP</li>
+              <li>Use {{title}} and {{content}} tags to insert the widget's title or content</li>
+              <li>Access the $post object for data concerning the page being displayed</li>
+              <li>Access the $widget object for more widget data</li>
+            </ul>
+          </div>
         </div>
       </div>
     <?php
