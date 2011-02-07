@@ -1,19 +1,19 @@
 === Widget Wrangler ===
 Contributors: daggerhart
-Donate link: http://www.daggerhart.com/widget-wrangler#donate
+Donate link: http://www.daggerhart.com/wordpress/widget-wrangler#donate
 Tags: widget, admin, widgets, administration, sidebar
 Requires at least: 3
-Tested up to: 3.0.1
+Tested up to: 3.0.4
 Stable tag: trunk
 
-A plugin for managing the display of widgets on a page by page basis. Widgets as post type.
+A plugin for managing the display of widgets on a page by page basis. Using widgets as a post type.
 
 == Description ==
 
 Widget Wrangler is a plugin for Wordpress that gives admin a clean interface for managing widgets on a page by page basis.
 It's basically Drupal Blocks on every page, with the ability to set the default location of the widgets in specific sidebars.
 Widget Wrangler provides widgets as a post type, gives you the ability to clone existing wordpress widgets, and provides shortcode support for individual widgets.
-Now with multiple 'sidebars' (groups of widgets, drupal: regions)!
+Now with multiple 'sidebars' (groups of widgets, like drupal regions)!
 
 Screencasts
 
@@ -48,11 +48,11 @@ In the widget-wrangler directory there is a file named 'widget-template.php'.  C
 
 = Can I use existing wordpress widgets? = 
 
-Some of them.  With this plugin I plan on focusing on the post-Wordpress-3.0 users.  Widgets programmed for older versions of wordpress will likely not work.
+Some of them.  With this plugin I am focusing on the post-Wordpress-3.0 users.  Widgets programmed for older versions of wordpress will likely not work.
 
 = What does it mean to Clone a widget? =
 
-When you clone a wordpress widget, it creates a new widget post in the Widget Wrangler system with the settings for that widget pre-filled in the Advanced Parsing area of the new widget.
+When you clone a wordpress widget, it creates a new widget post in the Widget Wrangler system with the settings for the original wordpress widget pre-filled in the Advanced Parsing area of the new widget.
 
 
 == Screenshots ==
@@ -62,6 +62,10 @@ When you clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Cloned Wordpress Widget
 
 == Changelog ==
+= 1.1rc5 =
+
+* IE 8 Bug fixes.
+* Clone Widget widget name now filling into advanced parse correctly.
 
 = 1.1rc4 =
 
@@ -87,5 +91,5 @@ Initial Release
 
 == Upgrade Notice ==
 
-RC3 is bugged with a cpability  issue, upgrade to RC4.
+RC3 is bugged with a capability  issue, upgrade to RC4.
 Additional features: Configurable capability_type & Automatic Paragraph support 

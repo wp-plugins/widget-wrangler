@@ -121,6 +121,8 @@ li.ww-sidebar-sort-item{
   float: right;
   margin: 4px 8% 0px 12px;
 }
+#ww-defaults { border-bottom: 1px solid #666;padding-top: 8px; }
+#ww-defaults p { padding-left: 20px; }
 #ww-defaults dt { font-weight: bold; }
 #ww-sidebar-page .description {
   width: 350px;

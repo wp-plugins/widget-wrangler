@@ -141,8 +141,10 @@ var $capability_type = "post";
   // Admin post meta contents
   function meta_parse()
   {
-    global $post;
+    global $post, $wpdb;
+    // post custom data
     $custom = get_post_custom($post->ID);
+    
     $parse = $custom["ww-parse"][0];
     $adv_enabled = $custom["ww-adv-enabled"][0];
     $wpautop = $custom["ww-wpautop"][0];

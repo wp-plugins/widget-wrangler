@@ -28,7 +28,7 @@ function ww_clone_insert($posted)
       }
     }
   }
-  $html_string.= "\$args['before_widget'] = '<div class=\"widget $widget_name\">';\n";
+  $html_string.= "\$args['before_widget'] = '<div class=\"widget ".strtolower($this_class_name)."\">';\n";
   $html_string.= "\$args['after_widget'] = '</div>';\n";
   $html_string.= "\$args['before_title'] = '<h2 class=\"widgettitle\">';\n";
   $html_string.= "\$args['after_title'] = '</h2>';\n";
