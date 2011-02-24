@@ -1,17 +1,19 @@
 <?php
 class Widget_Wrangler {
-var $meta_fields = array("ww-adv-enabled","ww-parse","ww-wpautop");
-var $settings = array();
-var $capability_type = "post";
-    
+  var $meta_fields = array("ww-adv-enabled","ww-parse","ww-wpautop");
+  var $settings = array();
+  var $capability_type;
+     
   /*
    * Constructor, build the new post type
    */
   function Widget_Wrangler()
   {
+    $capability_type = "post";  // somehow we lost scope since th last upgrade
     $settings = ww_get_settings();
+    
     // allow for custom capability type
-    if ($settings['capabilities'] == "advanced" && $settings['advanced'] != "")
+    if ($settings['capabilities'] == "advanced" && isset($settings['advanced']))
     {
       $capability_type = $settings['advanced'];
     }
@@ -35,6 +37,7 @@ var $capability_type = "post";
     register_post_type('widget', array(
       'labels' =>$labels,
       'public' => true,
+      'show_in_menu' => true,
       'show_ui' => true, // UI in admin panel
       '_builtin' => false, // It's a custom post type, not built in
       '_edit_link' => 'post.php?post=%d',

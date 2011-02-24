@@ -62,6 +62,10 @@ When you clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Cloned Wordpress Widget
 
 == Changelog ==
+= 1.1rc6 =
+
+* Fix for disappearing menu items with wordpress 3.1 update.  
+
 = 1.1rc5 =
 
 * IE 8 Bug fixes.
@@ -91,5 +95,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-RC3 is bugged with a capability  issue, upgrade to RC4.
-Additional features: Configurable capability_type & Automatic Paragraph support 
+RC6 Fixes a bug with the menu items dissappearing after updating to Wordpress 3.1
