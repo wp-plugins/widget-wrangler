@@ -5,7 +5,7 @@ Plugin URI: http://www.daggerhart.com/widget-wrangler
 Description: Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis.
 It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
 Author: Jonathan Daggerhart
-Version: 1.1rc6
+Version: 1.1rc7
 Author URI: http://www.daggerhart.com
 */
 /*  Copyright 2010  Jonathan Dagegrhart  (email : jonathan@daggerhart.com)
@@ -80,7 +80,7 @@ function ww_admin_init()
         $_GET['page'] == 'ww-clone'     ||
         $_GET['page'] == 'ww-sidebars')
     {
-      add_action('admin_head', 'ww_admin_js');
+      add_action('admin_enqueue_scripts', 'ww_admin_js');
       add_action('admin_head', 'ww_admin_css');
     }
   }
@@ -94,11 +94,13 @@ function ww_admin_init()
  */
 function ww_menu()
 {
-  add_submenu_page( 'edit.php?post_type=widget', 'Widget Sidebars', 'Sidebars', 'manage_options', 'ww-sidebars', 'ww_sidebars_page');
-  add_submenu_page( 'edit.php?post_type=widget', 'Default Widgets', 'Set Defaults', 'manage_options', 'ww-defaults', 'ww_defaults_page');
-  add_submenu_page( 'edit.php?post_type=widget', 'Clone WP Widget', 'Clone WP Widget', 'manage_options', 'ww-clone', 'ww_clone_page');
-  add_submenu_page( 'edit.php?post_type=widget', 'Settings', 'Settings', 'manage_options', 'ww-settings', 'ww_settings_page');
+  $sidebars = add_submenu_page( 'edit.php?post_type=widget', 'Widget Sidebars', 'Sidebars', 'manage_options', 'ww-sidebars', 'ww_sidebars_page');
+  $defaults = add_submenu_page( 'edit.php?post_type=widget', 'Default Widgets', 'Set Defaults', 'manage_options', 'ww-defaults', 'ww_defaults_page');
+  $clone    = add_submenu_page( 'edit.php?post_type=widget', 'Clone WP Widget', 'Clone WP Widget', 'manage_options', 'ww-clone', 'ww_clone_page');
+  $settings = add_submenu_page( 'edit.php?post_type=widget', 'Settings', 'Settings', 'manage_options', 'ww-settings', 'ww_settings_page');
   //add_submenu_page( 'edit.php?post_type=widget', 'Debug Widgets', 'Debug', 'manage_options', 'ww-debug', 'ww_debug_page');
+
+  add_action( "admin_print_scripts-$sidebars", 'ww_sidebar_js' );
 }
 
 /*
@@ -106,10 +108,25 @@ function ww_menu()
  */ 
 function ww_admin_js()
 {
-	print '<script type="text/javascript" src="'.WW_PLUGIN_URL.'/ww-admin.js"></script>';
- print "<script type='text/javascript' src='".get_bloginfo('wpurl')."/wp-includes/js/jquery/ui.core.js'></script>
+  wp_enqueue_script('ww-admin-js',
+                  plugins_url('/ww-admin.js', __FILE__ ),
+                  array('jquery-ui-core', 'jquery-ui-sortable'),
+                  false,
+                  true);
+ /* Old Way
+  print "<script type='text/javascript' src='".get_bloginfo('wpurl')."/wp-includes/js/jquery/ui.core.js'></script>
         <script type='text/javascript' src='".get_bloginfo('wpurl')."/wp-includes/js/jquery/ui.sortable.js'></script>";      
-   
+ 
+  print '<script type="text/javascript" src="'.WW_PLUGIN_URL.'/ww-admin.js"></script>';
+ */
+}
+function ww_sidebar_js()
+{
+  wp_enqueue_script('ww-sidebar-js',
+                    plugins_url('/ww-sidebars.js', __FILE__ ),
+                    array('jquery-ui-core', 'jquery-ui-sortable'),
+                    false,
+                    true);
 }
 function ww_adjust_css()
 {

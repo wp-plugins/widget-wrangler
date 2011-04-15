@@ -5,8 +5,7 @@ function ww_sidebars_create_form()
 {
   $sidebars = unserialize(get_option('ww_sidebars'));
   $sorting_items = '';
-  $output.= "<script type='text/javascript' src='".WW_PLUGIN_URL."/ww-sidebars.js'></script>
-              <div class='wrap'>
+  $output.= " <div class='wrap'>
                 <h2>Widget Sidebars</h2>
                 <p>A sidebar is a container for groups of widgets.  Like the pen I keep ma' cattle in.</p>
                 <table id='ww-sidebar-page'>

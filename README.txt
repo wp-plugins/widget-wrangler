@@ -62,6 +62,10 @@ When you clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Cloned Wordpress Widget
 
 == Changelog ==
+= 1.1rc7 =
+
+* Fix for javacsript not loading correctly.   Changed method to use script wp_enqueue_script.
+
 = 1.1rc6 =
 
 * Fix for disappearing menu items with wordpress 3.1 update.  
@@ -95,4 +99,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-RC6 Fixes a bug with the menu items dissappearing after updating to Wordpress 3.1
+RC7 Fix for javascript not loading correctly on Sidebars page.
