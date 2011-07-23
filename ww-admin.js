@@ -22,7 +22,7 @@ jQuery(function(){
     jQuery.each(lists, function(){
       var this_list = jQuery(this).children(".ww-item");
         jQuery.each(this_list, function(i){
-          jQuery(this).children(".ww-widget-weight").val(i+1).attr("disabled","");
+          jQuery(this).children(".ww-widget-weight").val(i+1);// stop working in 3.2:  .attr("disabled","");
         });
     });
   }
@@ -55,12 +55,10 @@ jQuery(function(){
         
         //console.log(select_val);
         //console.log(select_name);
-        //jQuery(this).val(select_val);
         if ( select_val != 'disabled')
         {
           //console.log(jQuery(this).val());
           //console.log(jQuery(this));
-          //jQuery(this).attr('selected','selected');
           jQuery(this).parent('.ww-item').clone().addClass('nojs').prependTo("#ww-sidebar-"+select_val+"-items").removeClass("disabled");
           jQuery(this).parent('.ww-item').remove();
           jQuery("#ww-sidebar-"+select_val+"-items select[name="+select_name+"]").val(select_val);

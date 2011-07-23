@@ -3,7 +3,7 @@ Contributors: daggerhart
 Donate link: http://www.daggerhart.com/wordpress/widget-wrangler#donate
 Tags: widget, admin, widgets, administration, sidebar
 Requires at least: 3
-Tested up to: 3.0.4
+Tested up to: 3.2
 Stable tag: trunk
 
 A plugin for managing the display of widgets on a page by page basis. Using widgets as a post type.
@@ -62,6 +62,10 @@ When you clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Cloned Wordpress Widget
 
 == Changelog ==
+= 1.1rc8 =
+
+* Fix for javascript with wordpress 3.2 update.  Added option to reset all widgets on all pages.
+
 = 1.1rc7 =
 
 * Fix for javacsript not loading correctly.   Changed method to use script wp_enqueue_script.
@@ -99,4 +103,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-RC7 Fix for javascript not loading correctly on Sidebars page.
+RC8 Fix for javascript with WP 3.2 upgrade.  Added option to reset all widgets on all pages.

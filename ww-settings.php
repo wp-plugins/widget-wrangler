@@ -2,14 +2,12 @@
 /*
  * TODO:
  *   Access Control
- *   Auto Paragraph?
- *   Maintain Line Breaks?
  */
 function ww_edit_settings_page()
 {
-  //print_r($wp_roles);
   $settings = ww_get_settings();
-  //print_r($settings);
+  
+  // handle checkboxes
   if($settings['capabilities'] == 'simple') { $simple_checked =  "checked"; }
   if($settings['capabilities'] == 'advanced') { $adv_checked = "checked"; } 
   
@@ -82,11 +80,29 @@ function ww_edit_settings_page()
         </div>  
         <input type="submit" value="Save" />
       </form>
+      
+      <form action="edit.php?post_type=widget&page=ww-settings&ww-settings-action=reset&noheader=true" method="post">
+        <h3>Mass Reset</h3>
+        <div>
+          <p><span style="color: red;">WARNING!</span>  If you click this button, all pages will lose their widget sidebar and order settings and will fall back on the default settings.</p>
+          <input type="submit" value="Reset All Widgets to Default" onclick="return confirm('Are you Really sure you want to Reset widget settings on all pages?');" />
+        </div>
+      </form>
     </div>
   <?php
 }
-
-
+/*
+ * Reset all pages to use the default widget settings
+ */
+function ww_reset_to_default_settings()
+{
+  global $wpdb;
+  $query = "DELETE FROM `".$wpdb->prefix."postmeta` WHERE `meta_key` = 'ww_post_widgets'";
+  $wpdb->query($query);
+}
+/*
+ * Save the Widget Wrangler Settings page
+ */
 function ww_save_settings($post)
 {
   //print_r($post['settings']);

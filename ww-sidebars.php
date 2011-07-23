@@ -1,6 +1,8 @@
 <?php
 
-
+/*
+ * Build the form 
+ */
 function ww_sidebars_create_form()
 {
   $sidebars = unserialize(get_option('ww_sidebars'));
@@ -17,6 +19,7 @@ function ww_sidebars_create_form()
                   <ul id='ww-sidebars-list'>";
   if (is_array($sidebars))
   {
+    // loop through each sidebar and build form
     $i = 1;
     foreach($sidebars as $slug => $sidebar)
     {
@@ -78,6 +81,9 @@ function ww_sidebars_create_form()
   
   print $output;
 }
+/*
+ * Handle sorting of sidebars
+ */
 function ww_sidebar_sort($posted = array())
 {
   $all_sidebars = ww_get_all_sidebars();
@@ -99,7 +105,7 @@ function ww_sidebar_sort($posted = array())
   }
 }
 /*
- *
+ * Add a new sidebar
  */
 function ww_sidebar_insert($posted = array())
 {
@@ -120,7 +126,7 @@ function ww_sidebar_insert($posted = array())
   update_option('ww_sidebars',$new_option);
 }
 /*
- *
+ * Delete a sidebar
  */
 function ww_sidebar_delete($posted = array())
 {
@@ -139,7 +145,7 @@ function ww_sidebar_delete($posted = array())
   update_option('ww_sidebars', $new_option);
 }
 /*
- *
+ * Update/Edit a sidebar
  */
 function ww_sidebar_update($posted = array())
 {

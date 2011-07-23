@@ -5,10 +5,10 @@ Plugin URI: http://www.daggerhart.com/widget-wrangler
 Description: Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis.
 It also provides widgets as a post type, and the ability to clone existing wordpress widgets.
 Author: Jonathan Daggerhart
-Version: 1.1rc7
+Version: 1.1rc8
 Author URI: http://www.daggerhart.com
 */
-/*  Copyright 2010  Jonathan Dagegrhart  (email : jonathan@daggerhart.com)
+/*  Copyright 2010  Jonathan Daggerhart  (email : jonathan@daggerhart.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License, version 2, as 
@@ -27,6 +27,7 @@ Author URI: http://www.daggerhart.com
 define('WW_PLUGIN_DIR', dirname(__FILE__));
 define('WW_PLUGIN_URL', get_bloginfo('wpurl')."/wp-content/plugins/widget-wrangler");
 
+// add the widget post type class
 include WW_PLUGIN_DIR.'/ww-widget-class.php';
 
 // Initiate the plugin
@@ -34,7 +35,6 @@ add_action("init", "Widget_Wrangler_Init");
 add_action('admin_menu', 'ww_menu');
 
 // HOOK IT UP TO WORDPRESS
-//include_once WW_PLUGIN_DIR.'/ww-includes.php';
 add_action( 'admin_init', 'ww_admin_init' );
 add_action( 'save_post', 'ww_save_post' );
 add_action( 'admin_head', 'ww_admin_css');
@@ -113,13 +113,10 @@ function ww_admin_js()
                   array('jquery-ui-core', 'jquery-ui-sortable'),
                   false,
                   true);
- /* Old Way
-  print "<script type='text/javascript' src='".get_bloginfo('wpurl')."/wp-includes/js/jquery/ui.core.js'></script>
-        <script type='text/javascript' src='".get_bloginfo('wpurl')."/wp-includes/js/jquery/ui.sortable.js'></script>";      
- 
-  print '<script type="text/javascript" src="'.WW_PLUGIN_URL.'/ww-admin.js"></script>';
- */
 }
+/*
+ * Javascript for drag and drop sidebar sorting
+ */
 function ww_sidebar_js()
 {
   wp_enqueue_script('ww-sidebar-js',
@@ -128,6 +125,9 @@ function ww_sidebar_js()
                     false,
                     true);
 }
+/*
+ * Handle CSS necessary for Admin Menu on left
+ */
 function ww_adjust_css()
 {
   print "<style type='text/css'>
@@ -225,6 +225,9 @@ function ww_settings_page()
     {
       case "save":
         ww_save_settings($_POST);
+        break;
+      case "reset":
+        ww_reset_to_default_settings();
         break;
     }
     wp_redirect(get_bloginfo('wpurl').'/wp-admin/edit.php?post_type=widget&page=ww-settings');  
@@ -429,6 +432,7 @@ function ww_dynamic_sidebar($sidebar_slug = 'default')
     $i = 0;
     $total = count($widgets_array[$sidebar_slug]) - 1;
     
+    // custom sorting with callback
     usort($widgets_array[$sidebar_slug],'ww_cmp');
     $sorted_widgets = array_reverse($widgets_array[$sidebar_slug]);
 
@@ -566,7 +570,7 @@ function ww_create_widget_list($widgets, $ref_array, $sidebars)
       
       // setup initial info
       $sidebar_slug = $keys[0];
-      ($sidebar_slug == 'disabled') ? $disabled = "disabled='disabled'" : $disabled = '';
+      // Removed in WP3.2,Disabled inputs don't get submitted: ($sidebar_slug == 'disabled') ? $disabled = "disabled='disabled'" : $disabled = '';
       // get weight
         //$keys[1] = specific widget array
       $weight = $ref_array[$sidebar_slug][$keys[1]]['weight'];
@@ -581,7 +585,7 @@ function ww_create_widget_list($widgets, $ref_array, $sidebars)
       }
       
       $temp[$weight] = "<li class='ww-item ".$sidebar_slug." nojs' width='100%'>
-                                      <input class='ww-widget-weight' name='ww-".$widget->post_name."-weight' type='text' size='2' value='$weight' $disabled />
+                                      <input class='ww-widget-weight' name='ww-".$widget->post_name."-weight' type='text' size='2' value='$weight' />
                                       <select name='ww-".$widget->post_name."-sidebar'>
                                       ".$sidebars_options."
                                       </select>
@@ -765,9 +769,8 @@ function ww_set_default_settings()
 }
 
 /*
- * Extra helper functions I likely stole from somewhere
+ * usort callback. I likely stole this from somewhere.. like php.net
  */
-// helps find the weight.. or something
 function ww_cmp($a,$b) {
   if ($a['weight'] == $b['weight']) return 0;
   return ($a['weight'] < $b['weight'])? -1 : 1;
