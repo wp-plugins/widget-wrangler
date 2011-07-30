@@ -11,7 +11,9 @@ A plugin for managing the display of widgets on a page by page basis. Using widg
 == Description ==
 
 Widget Wrangler is a plugin for Wordpress that gives administrators a clean interface for managing widgets on a page by page basis.
+
 Widget Wrangler provides widgets as a post type, gives you the ability to use existing wordpress widgets (called 'Cloning'), and provides shortcode support for individual widgets.
+
 Create and manage multiple sidebars (groups of widgets) per page.
 It's similar to Drupal Blocks, but on every page, with the ability to set the default location of the widgets in specific sidebars.
 
@@ -38,7 +40,7 @@ Screencasts
 Widget Wrangler comes with built in shortcode support for each widget.  To show a single widget in a content area, use the shortcode pattern of [ww_widget id={post_id}].
 ie. [ww_widget id=240] where 240 is the post_id of the widget.
 
-= How do I find out a wdiget's post ID? =
+= How do I find out a widget's post ID? =
 
 A widget's post ID is displayed in the 'Options' panel when editing that widget.
 
@@ -48,7 +50,8 @@ You must edit your template files and find any instance of the dynamic_sidebar()
 
 = How can I control the widget's template (HTML)? =
 
-In the widget-wrangler directory there is a file named 'widget-template.php'.  Copy this file to your theme's root directory and rename it 'widget.php'.  You can edit the HTML in the file to have widgets defaultly appear as you want.  To template specific widgets, save a copy of widget-template.php as widget-[widget ID].php in your theme directory. (eg. widget-121.php, where 121 is the widget's ID)
+In the widget-wrangler directory there is a file named 'widget-template.php'.  Copy this file to your theme's root directory and rename it 'widget.php'.  You can edit the HTML in the file to have widgets defaultly appear as you want.
+To template specific widgets, save a copy of widget-template.php as widget-[widget ID].php in your theme directory. (eg. widget-121.php, where 121 is the widget's ID)
 
 = Can I use existing wordpress widgets? = 
 
