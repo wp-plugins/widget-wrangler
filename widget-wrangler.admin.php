@@ -13,7 +13,7 @@ function ww_admin_init()
   $show_panel = true;
   
   if ($show_panel)
-  {  
+  {
     // Add panels into the editing sidebar(s)
     foreach($settings['post_types'] as $post_type){
       add_meta_box('ww_admin_meta_box', __('<img src="'.WW_PLUGIN_URL.'/images/wrangler_icon.png" />Widget Wrangler'), 'ww_admin_sidebar_panel', $post_type, 'normal', 'high');

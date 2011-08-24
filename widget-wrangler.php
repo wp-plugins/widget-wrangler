@@ -388,12 +388,21 @@ function ww_dynamic_sidebar($sidebar_slug = 'default')
 function ww_get_settings()
 {
   if ($settings = get_option("ww_settings")){
-    return unserialize($settings);
+    $settings = unserialize($settings);
   }
   else{
     ww_settings_set_default();
-    return ww_get_settings();
+    $settings = ww_get_settings();
   }
+  
+  // update check, whoops!
+  if(!is_array($settings['post_types'])){
+    $settings["post_types"][] = "page";
+    $settings["post_types"][] = "post";  
+    update_option("ww_settings", serialize($settings));
+  }
+  
+  return $settings;
 }
 /*
  * Default settings
