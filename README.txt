@@ -69,6 +69,13 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Cloned Wordpress Widget
 
 == Changelog ==
+= 1.3 =
+
+* Feature: Now use Widget Wrangler on any post type and the blog page (Posts page).
+* Feature: Use template with advanced parsed widget.
+* Feature: Set widgets for the home/frontpage when using Wordpress's 'Reading Setting' for 'Front page displays' as 'Your latest posts'. Settings >> Reading >> Front page displays.
+* Programming: Refactored function names to standardize concepts and descriptors
+
 = 1.2.1 =
 
 * Feature: Additional template options per widget (see FAQ: How can I control a widget's template)
@@ -125,4 +132,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.2.1 Addition widget template options. Fixed cloned widgets, they now use the template. Fixed other minor bugs. Tested with buddypress.
+1.3 Use WW for any post type.  Use widget template for advanced parsed widgets (widgets that use PHP). Set widgets for home/front page when using Posts page as home/front page (Wordpress's default setting where the home page is the most recent Posts).

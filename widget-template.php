@@ -1,7 +1,7 @@
 <?php
 /*
  * Some useful variables:
- * The $post object contains the information for the Page the widget is being displayed on
+ * The $post object contains the information for the Page, Post, or other post type the widget is being displayed on
  * 
  * $post->post_title
  * $post->post_content
@@ -15,9 +15,13 @@
  *
  */
 ?>
-<div class="widget">
-  <h3><?php print $widget->post_title;?></h3>
-  <div class="content">
-    <?php print $widget->post_content; ?>
-  </div>
+<div id="widget-<?php print $widget->ID; ?>" class="widget">
+  <?php if($widget->post_title) { ?>
+    <h3><?php print $widget->post_title;?></h3>
+  <?php } ?>
+  <?php if($widget->post_content) { ?>  
+    <div class="content">
+      <?php print $widget->post_content; ?>
+    </div>
+  <?php } ?>
 </div>

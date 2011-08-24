@@ -1,6 +1,6 @@
 <?php
 class Widget_Wrangler {
-  var $meta_fields = array("ww-adv-enabled","ww-parse","ww-wpautop");
+  var $meta_fields = array("ww-adv-enabled","ww-parse","ww-wpautop","ww-adv-template");
   var $settings = array();
   var $capability_type;
      
@@ -13,9 +13,9 @@ class Widget_Wrangler {
     $settings = ww_get_settings();
     // allow for custom capability type
     $capability_type = ($settings['capabilities'] == "advanced" && isset($settings['advanced'])) ? $settings['advanced'] : "post";
-
     $labels = array(
       'name' => _x('Widget Wrangler', 'post type general name'),
+      'all_items' => __('All Widgets'),
       'singular_name' => _x('Widget', 'post type singular name'),
       'add_new' => _x('Add New', 'widget'),
       'add_new_item' => __('Add New Widget'),
@@ -26,9 +26,8 @@ class Widget_Wrangler {
       'menu_icon' => WW_PLUGIN_DIR.'/icon-wrangler.png',
       'not_found' =>  __('No widgets found'),
       'not_found_in_trash' => __('No widgets found in Trash'), 
-      'parent_item_colon' => ''
+      'parent_item_colon' => '',
     );
-
     // Register custom post types
     register_post_type('widget', array(
       'labels' =>$labels,
@@ -56,7 +55,7 @@ class Widget_Wrangler {
     add_action("wp_insert_post", array(&$this, "wp_insert_post"), 10, 2);
   }
   /*
-   * Custom columns for the main Widgets mangement page
+   * Custom columns for the main Widgets management page
    */  
   function edit_columns($columns)
   {
@@ -75,18 +74,17 @@ class Widget_Wrangler {
   function custom_columns($column)
   {
     global $post;
+    $custom = get_post_custom();
     switch ($column)
     {
       case "ww_description":
        the_excerpt();
        break;
       case "ww_adv_enabled":
-       $custom = get_post_custom();
        echo $custom["ww-adv-enabled"][0];
        break;
     }
   }
-
   
   /*
    * When a post is inserted or updated
@@ -146,10 +144,12 @@ class Widget_Wrangler {
     $custom = get_post_custom($post->ID);
     $parse = $custom["ww-parse"][0];
     $adv_enabled = $custom["ww-adv-enabled"][0];
+    $adv_template = $custom["ww-adv-template"][0];
     $wpautop = $custom["ww-wpautop"][0];
     
     // default to checked upon creation
     $adv_checked = (isset($adv_enabled)) ? 'checked="checked"' : '';
+    $adv_template_checked = (isset($adv_template)) ? 'checked="checked"' : '';
     $wpautop_checked = (isset($wpautop) || (($_GET['action'] == null) && ($_GET['post_type'] == 'widget'))) ? 'checked="checked"' : '';
     
     ?><div id="ww-template">
@@ -159,8 +159,12 @@ class Widget_Wrangler {
         </div>
         <div>
           <h4>Advanced Parsing</h4>
-          <label><input type="checkbox" name="ww-adv-enabled" <?php print $adv_checked; ?> /> Enable Advanced Parsing</label>
-          <br />
+          <div id="ww-advanced-field">
+            <label><input id="ww-adv-parse-toggle" type="checkbox" name="ww-adv-enabled" <?php print $adv_checked; ?> /> Enable Advanced Parsing</label>
+            <div id="ww-advanced-template">
+              <label><input id="ww-adv-template-toggle" type="checkbox" name="ww-adv-template" <?php print $adv_template_checked; ?> /> Template the Advanced Parsing Area</label> <em>(Do not use with Cloned Widgets.  Details below)</em>
+            </div>
+          </div>
           <textarea name="ww-parse" cols="40" rows="16" style="width: 100%;"><?php print htmlentities($parse); ?></textarea>
           <div class="adv-parse-description">
             <h5>In the Advanced Parsing area you can:</h5>
@@ -171,8 +175,14 @@ class Widget_Wrangler {
               <li>Access the $widget object for more widget data (see provided template for examples)</li>
               <li>Access the $post object for data concerning the page being displayed (see provided template for examples)</li>
             </ul>
-            <h5>Note: Cloned Wordpress widgets always use widget templates.</h5>
-          </div>
+            <h5>Templating Advanced Parsed Widgets</h5>
+            <ul>
+              <li>To template an advanced parsed widget you must return an associative array with a title and content string.</li>
+              <li>Example: &lt;?php return array("title" => "The Widget's Title", "content" => "The Widget's Content"); ?&gt;</li>
+              <li><strong>All Cloned widgets are already templated so this setting should not be used for them.</strong></li>
+              <li><strong>If you are unclear on what this means, it is highly recommended that you avoid this option.</strong></li>
+            </ul>
+         </div>
         </div>
       </div>
     <?php

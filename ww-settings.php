@@ -3,7 +3,7 @@
  * TODO:
  *   Access Control
  */
-function ww_edit_settings_page()
+function ww_settings_form()
 {
   $settings = ww_get_settings();
   
@@ -30,8 +30,8 @@ function ww_edit_settings_page()
     <div class='wrap'>
       <h2>Widget Wrangler Settings</h2>
       <form action="edit.php?post_type=widget&page=ww-settings&ww-settings-action=save&noheader=true" method="post">
-        <h3>Capabilities </h3>
-        <div class="ww-settings-cap">
+        <h3 class="ww-settings-title">Capabilities </h3>
+        <div class="ww-settings-field">
           <p> 
             <label>
               <input name="settings[capabilities]" type="radio" value="simple" <?php print $simple_checked; ?> />
@@ -39,33 +39,6 @@ function ww_edit_settings_page()
             </label>
           </p>
           <hr />
-          <?php /*
-          <!-- p>
-            <label>
-              <input name="settings[capabilities]" type="radio" value="roles" <?php print $role_checked; ?> />
-              <strong>Per Role</strong>: Check which roles should be able to edit Widget placement on pages.</label>
-              Only roles checked below can access widget placement, sidebars defaults, cloning, and settings.
-              <br />
-              <em>Unchecked Roles who can create a Post will still be able to create and edit their own Widgets, but they will not be able to control widget placement on Pages.</em>
-          </p>
-          <ul class="ww-settings-roles">
-            <?php
-              foreach ($wp_roles->role_names as $key => $name )
-              {
-                // dynamically create variable name for ${role}_checked value
-                $this_checked = $key."_checked";
-                ?>
-                  <li>
-                    <label>
-                      <input name="settings[roles][<?php print $key; ?>]" type="checkbox" <?php print $$this_checked; ?> /> <?php print $name; ?>
-                    </label>
-                  </li>    
-                <?php
-              }
-            ?>
-          </ul>
-          <hr / -->
-          */ ?>
           <p>
             <label>
               <input name="settings[capabilities]" type="radio" value="advanced" <?php print $adv_checked; ?> />
@@ -77,15 +50,25 @@ function ww_edit_settings_page()
           </p>
           <label><input name="settings[advanced]" type="text" size="20" value="<?php print $settings['advanced']; ?>"/> Capability Type</label> 
           <br />
-        </div>  
-        <input type="submit" value="Save" />
+        </div>
+        <h3 class="ww-settings-title">Post Types</h3>
+        <div class="ww-settings-field">
+          <p>
+            Type the names of all post types you would like to enable Widget Wrangler on.  Separate each post type with a comma. By default Widget Wrangler is enabled for Pages and Posts (eg. page,post).<br />
+            You may not allow Widget Wrangler on widget posts.<br/>
+            <textarea name="settings[post_types]" cols="60" rows="3"><?php if($settings['post_types']) { print implode(',', $settings['post_types']); } ?></textarea>
+          </p>
+        </div>
+        <input class="button" type="submit" value="Save Settings" />
       </form>
       
       <form action="edit.php?post_type=widget&page=ww-settings&ww-settings-action=reset&noheader=true" method="post">
-        <h3>Mass Reset</h3>
-        <div>
-          <p><span style="color: red;">WARNING!</span>  If you click this button, all pages will lose their widget sidebar and order settings and will fall back on the default settings.</p>
-          <input type="submit" value="Reset All Widgets to Default" onclick="return confirm('Are you Really sure you want to Reset widget settings on all pages?');" />
+        <h3 class="ww-settings-title">Mass Reset</h3>
+        <div class="ww-settings-field">
+          <p>
+            <span style="color: red;">WARNING!</span>  If you click this button, all pages will lose their widget sidebar and order settings and will fall back on the default settings.</p>
+            <input class="button" type="submit" value="Reset All Widgets to Default" onclick="return confirm('Are you Really sure you want to Reset widget settings on all pages?');" />
+          </p>
         </div>
       </form>
     </div>
@@ -94,7 +77,7 @@ function ww_edit_settings_page()
 /*
  * Reset all pages to use the default widget settings
  */
-function ww_reset_to_default_settings()
+function ww_settings_reset_widgets()
 {
   global $wpdb;
   $query = "DELETE FROM `".$wpdb->prefix."postmeta` WHERE `meta_key` = 'ww_post_widgets'";
@@ -103,31 +86,21 @@ function ww_reset_to_default_settings()
 /*
  * Save the Widget Wrangler Settings page
  */
-function ww_save_settings($post)
+function ww_settings_save($post)
 {
-  //print_r($post['settings']);
-  $settings = serialize($post['settings']);
- 
-  // adjust the roles
-  /*
-  global $wp_roles;
-  if ($post['settings']['capabilities'] == 'roles')
-  { 
-    foreach($wp_roles->role_names as $role => $name)
-    {
-      $role_object = get_role($role);
-      
-      if ($post['settings']['roles'][$role] == "on")
-      {
-        $role_object->add_cap('manage_widgets');
-      }
-      else
-      {
-        $role_object->remove_cap('manage_widgets');
-      }
+  // make into array
+  $post_types = explode(",", $post['settings']['post_types']);
+  // remove white space
+  for($i=0;$i<count($post_types);$i++){
+    $post_types[$i] = trim($post_types[$i]);
+    // don't allow widgets on widget pages
+    if($post_types[$i] == "widget"){
+      unset($post_types[$i]);
     }
   }
-  */
+  $post['settings']['post_types'] = $post_types;
+  $settings = serialize($post['settings']);
   
+  // save to wordpress options
   update_option("ww_settings", $settings);
 }

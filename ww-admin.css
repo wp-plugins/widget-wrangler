@@ -8,7 +8,6 @@
 #ww-disabled-items li {
   background: #eee; 
 }
-
 li.ww-item,
 li.ww-sidebar-sort-item{
   line-height: 30px;
@@ -54,13 +53,11 @@ li.ww-sidebar-sort-item{
 #all-widgets td.title { font-weight: bold; width: 60%; }
 #all-widgets td.name { font-size: 16px;}
 #all-widgets td.edit { text-align: center;}
-
 .ww-clone-widgets {
   width: 300px;
   float: left;
   margin: 0px 0px 0px 24px;
 }
-
 #ww-sidebar-page ul {
   width: 350px;
 }
@@ -91,8 +88,19 @@ li.ww-sidebar-sort-item{
 .ww-sidebar-sort-submit {
   margin-top: 24px;
 }
+#ww-advanced-field {
+  padding: 0px 0px 12px;
+}
+#ww-advanced-template {
+  padding: 4px 0px;
+}
+#ww-advanced-template .ww-adv-template-description{
+  padding: 8px 16px;
+  font-style: italic;
+}
 .adv-parse-description {
-  color: #444;padding-left: 12px;
+  color: #444;
+  padding-left: 12px;
 }
 .adv-parse-description ul  { }
 .adv-parse-description ul li {
@@ -154,11 +162,16 @@ li.ww-sidebar-sort-item {
 .ww-item {
   cursor: move;
 }
-.ww-settings-cap {
-  padding: 10px 20px;
+.ww-settings-field {
+  padding: 0px 20px 10px;
   margin: 6px 0px;
   background-color: #fff;
   border: 1px solid #bbb;
+}
+.ww-settings-title {
+  margin: 20px 0px 6px;
+  font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",sans-serif;
+  font-size: 22px;
 }
 .ww-settings-roles {
   padding: 8px 24px;

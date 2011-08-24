@@ -98,7 +98,7 @@ function ww_default_page_widgets($defaults_array)
   
   $output['close'] = " <!-- .inner -->
                </div><!-- .outer -->
-               <input name='ww-save-default' type='submit' value='Save' />
+               <input class='button' name='ww-save-default' type='submit' value='Save' />
                </form>
              </div>";
   if(is_array($output['active']))
@@ -110,5 +110,5 @@ function ww_default_page_widgets($defaults_array)
     }
   }
   // theme it out
-  ww_theme_page_edit($output);
+  ww_theme_admin_panel($output);
 }

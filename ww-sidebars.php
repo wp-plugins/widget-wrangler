@@ -1,9 +1,8 @@
 <?php
-
 /*
  * Build the form 
  */
-function ww_sidebars_create_form()
+function ww_sidebars_form()
 {
   $sidebars = unserialize(get_option('ww_sidebars'));
   $sorting_items = '';
@@ -66,14 +65,14 @@ function ww_sidebars_create_form()
                 <form action='edit.php?post_type=widget&page=ww-sidebars&ww-sidebar-action=insert&noheader=true' method='post'>
                   Sidebar Name: <br />
                   <input name='ww-new-sidebar' type='text' value='' />
-                  <input type='submit' value='Create' />
+                  <input class='button' type='submit' value='Create Sidebar' />
                 </form>
                 <h2>Sort your Sidebars</h2>
                 <form action='edit.php?post_type=widget&page=ww-sidebars&ww-sidebar-action=sort&noheader=true' method='post'>
                   <ul id='ww-sidebars-sort'>
                   ".$sorting_items."
                   </ul>
-                  <input class='ww-sidebar-sort-submit' type='submit' name='ww-sidebars-save' value='Save Order' />
+                  <input class='ww-sidebar-sort-submit button' type='submit' name='ww-sidebars-save' value='Save Order' />
                 </form>
               </td>
               </table>

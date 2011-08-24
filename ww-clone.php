@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Inserts a cloned WP widget as a WW widget
  */
@@ -61,7 +60,7 @@ function ww_clone_insert($posted)
 /*
  * Display widgets available for cloning.
  */
-function ww_clone_new_page()
+function ww_clone_form()
 {
   global $wp_widget_factory,$wp_registered_widget_controls,$wp_registered_widget_updates,$wp_registered_widgets;
   $total_widgets = count($wp_widget_factory->widgets);
@@ -97,7 +96,7 @@ function ww_clone_new_page()
                       <input type='hidden' name='ww-classname' value='$class_name' />
                       <input type='hidden' name='ww-keyname' value='$posted_array_key' />
                       ".$new_class."
-                      <input class='ww-clone-submit' type='submit' value='Create' />
+                      <input class='ww-clone-submit button' type='submit' value='Create' />
                     </form>
                   </div>
                 </div>
