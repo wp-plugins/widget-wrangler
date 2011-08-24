@@ -69,6 +69,10 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Cloned Wordpress Widget
 
 == Changelog ==
+= 1.3.1 =
+
+* Bug fix: upgrading to 1.3 had no post type settings. Grrr, sry.
+
 = 1.3 =
 
 * Feature: Now use Widget Wrangler on any post type and the blog page (Posts page).
@@ -132,4 +136,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.3 Use WW for any post type.  Use widget template for advanced parsed widgets (widgets that use PHP). Set widgets for home/front page when using Posts page as home/front page (Wordpress's default setting where the home page is the most recent Posts).
+1.3.1 Use WW for any post type.  Use widget template for advanced parsed widgets (widgets that use PHP). Set widgets for home/front page when using Posts page as home/front page (Wordpress's default setting where the home page is the most recent Posts).
