@@ -14,10 +14,6 @@ function ww_admin_init()
   
   if ($show_panel)
   {
-    // update 1.3.1 fix
-    if(!is_array($settings['post_types'])){
-      $settings['post_types'][] = 'page';
-    }
     // Add panels into the editing sidebar(s)
     foreach($settings['post_types'] as $post_type){
       add_meta_box('ww_admin_meta_box', __('<img src="'.WW_PLUGIN_URL.'/images/wrangler_icon.png" />Widget Wrangler'), 'ww_admin_sidebar_panel', $post_type, 'normal', 'high');
