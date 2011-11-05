@@ -42,13 +42,18 @@ function ww_clone_insert($posted)
   $new_widget['ping_status'] = 'closed';
   $new_widget['post_status'] = 'draft';
   $new_widget['post_type'] = 'widget';
+  // Herb contributed fix for problem cloning
+  $new_widget['post_content'] = '';
+  $new_widget['to_ping'] = '';
+  $new_widget['pinged'] = '';
+  $new_widget['post_content_filtered'] = '';
   
   // post as meta values
   $new_meta['parse'] = $parse_string;
   $new_meta['adv_enabled'] = 'on';
   
   // insert new widget into db
-  $format = array('%d','%s','%s','%s','%s','%s','%s');
+  $format = array('%d','%s','%s','%s','%s','%s','%s', '%s', '%s', '%s');
   $wpdb->insert($wpdb->prefix."posts", $new_widget, $format);
   $new_post_id = $wpdb->insert_id;
   update_post_meta($new_post_id,'ww-parse', $new_meta['parse']);

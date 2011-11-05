@@ -145,7 +145,7 @@ div.widget-action {
   height: 26px;
   width: 26px;
   cursor: pointer;
-  background:transparent url('/wp-admin/images/menu-bits.gif') no-repeat scroll 0 -110px;
+  background:transparent url('images/menu-bits.gif') no-repeat scroll 0 -110px;
 }
 .widget-inside {
   display: none;
@@ -155,7 +155,7 @@ div.widget-action {
   cursor: default;
 }
 li.ww-sidebar-sort-item {
-  background: #DFDFDF url('/wp-admin/images/gray-grad.png') repeat-x scroll left top;
+  background: #DFDFDF url('images/gray-grad.png') repeat-x scroll left top;
   margin-bottom: 2px;
 }
 .ww-sidebar-sort-item,

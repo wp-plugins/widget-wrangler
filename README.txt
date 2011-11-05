@@ -31,7 +31,8 @@ Screencasts
 1. Add a new sidebar under the Widget Wrangler Sidebars menu item
 1. Begin adding widgets under the Widget Wrangler Add New menu
 1. Set default widgets on the Widget Wrangler Set Defaults page
-1. Add the function 'ww_dynamic_sidebar('sidebar_slug');' to your page templates. Normally, you will want to replace the existing 'dynamic_sidebar()' function with this one.
+1. (Sidebar Display Option A) Add the function 'ww_dynamic_sidebar('sidebar_slug');' to your page templates. Normally, you will want to replace the existing 'dynamic_sidebar()' function with this one.
+1. (Sidebar Display Option B) If you don't want to edit your template files, you can add a Widget Wrangler Sidebar to your existing sidebars by using the WW Sidebar widget in the Wordpress Widget area.
 
 == Frequently Asked Questions ==
 
@@ -46,7 +47,8 @@ A widget's post ID is displayed in the 'Options' panel when editing that widget.
 
 = How do I display my widgets? =
 
-You must edit your template files and find any instance of the dynamic_sidebar() function.  Replace these functions with ww_dynamic_sidebar('name_of_sidebar')
+There are two ways to accomplish this.   The easiest way is to go to the standard Widget area under the Appearance admin menu item and drag the WW Sidebar widget into the sidebar area where it should appear, then select which WW sidebar should be shown from the widget options.
+The other way requires you to edit your template files and find any instance of the dynamic_sidebar() function.  Replace these functions with ww_dynamic_sidebar('name_of_sidebar').
 
 = How can I control the widget's template (HTML)? =
 
@@ -55,7 +57,7 @@ To template specific widgets, save a copy of widget-template.php as widget-[widg
 
 = Can I use existing wordpress widgets? = 
 
-Mostly. Widgets designed for Wordpress 3+ are able to be used with the 'Clone WP Widget' option in th Widget Wrangler menu.  Widgets programmed for older versions of wordpress may not work.
+Mostly. Widgets designed for Wordpress 3+ are able to be used with the 'Clone WP Widget' option in the Widget Wrangler menu.  Widgets programmed for older versions of wordpress may not work.
 
 = What does it mean to Clone a widget? =
 
@@ -67,8 +69,16 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. Widget Page Manager
 1. Individual Widget
 1. Cloned Wordpress Widget
+1. WW Sidebar Widget
 
 == Changelog ==
+= 1.4 =
+
+* Feature: Preview Widget on the widget's edit page
+* Feature: Add WW sidebars using Wordpress's standard widget system
+* Bug fix: Issue with cloning specific wordpress widgets
+* Bug fix: Images not showing up in non-standard install directories
+
 = 1.3.2 =
 
 * Bug fix: upgrading to 1.3.1 had no post type settings. Trouble fixing.
@@ -140,4 +150,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.3.2 Fixed bug relating to upgrading from 1.2x to 1.3x
+1.4 Additional functionality with Widget Preview, and Sidebar WP Widgets  You can now add Widget Wrangler Sidebars to your theme using the standard Wordpress Widget system.

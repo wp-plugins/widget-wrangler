@@ -5,7 +5,7 @@ Plugin URI: http://www.widgetwrangler.com
 Description: Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis.
 It also provides widgets as a post type, the ability to clone existing wordpress widgets, and granular control over widgets' templates.
 Author: Jonathan Daggerhart
-Version: 1.3.2
+Version: 1.4
 Author URI: http://www.daggerhart.com
 */
 /*  Copyright 2010  Jonathan Daggerhart  (email : jonathan@daggerhart.com)
@@ -28,6 +28,9 @@ include WW_PLUGIN_DIR.'/ww-widget-class.php';
 
 // include admin panel and helper functions
 include WW_PLUGIN_DIR.'/widget-wrangler.admin.php';
+
+// include WP standard widgets for sidebars
+include WW_PLUGIN_DIR.'/ww-sidebars-widget.php';
 
 // Initiate the plugin
 add_action( 'init', 'Widget_Wrangler_Init');
@@ -303,7 +306,7 @@ function ww_adv_parse_widget($widget)
       $output = ww_template_widget($widget);
     }
     else {
-      $output = "Error:  This widget did not return an array.";
+      $output = "<!-- Error:  This widget did not return an array. -->";
     }
   }
   else
@@ -317,7 +320,9 @@ function ww_adv_parse_widget($widget)
     // execute adv parsing area
     ob_start();
       eval('?>'.$parsed);
-      $output = ob_get_clean();    
+      $output = ob_get_clean();
+      // fix for recent post widget not resetting the query
+      $post = $page;
   }
   
   return $output;

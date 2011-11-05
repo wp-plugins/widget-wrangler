@@ -1,4 +1,7 @@
 <?php
+/*
+ * Widget Wrangler custom_post_type class for widget post type
+ */
 class Widget_Wrangler {
   var $meta_fields = array("ww-adv-enabled","ww-parse","ww-wpautop","ww-adv-template");
   var $settings = array();
@@ -133,6 +136,22 @@ class Widget_Wrangler {
   {
     // Custom meta boxes for the edit widget screen
     add_meta_box("ww-parse", "Options", array(&$this, "meta_parse"), "widget", "normal", "high");
+    add_meta_box("ww-widget-preview", "Widget Preview", array(&$this, "meta_widget_preview"), "widget", "side", "high");
+  }
+  
+  // Admin preview box
+  function meta_widget_preview(){
+    global $post;
+    if ($post->ID)
+    {
+      $widget = ww_get_single_widget($post->ID);
+      ?>
+        <div id="ww-preview">
+          <p><em>This preview does not include your theme's CSS stylesheet.</em></p>
+          <?php print ww_theme_single_widget($widget); ?>
+        </div>
+      <?php
+    }
   }
   
   // Admin post meta contents
