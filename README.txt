@@ -72,6 +72,10 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. WW Sidebar Widget
 
 == Changelog ==
+= 1.4.1 =
+
+* Bug fix: Forgot to add new images to svn
+
 = 1.4 =
 
 * Feature: Preview Widget on the widget's edit page
@@ -150,4 +154,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.4 Additional functionality with Widget Preview, and Sidebar WP Widgets  You can now add Widget Wrangler Sidebars to your theme using the standard Wordpress Widget system.
+1.4.1 Minor bug fix with css images

@@ -136,7 +136,7 @@ class Widget_Wrangler {
   {
     // Custom meta boxes for the edit widget screen
     add_meta_box("ww-parse", "Options", array(&$this, "meta_parse"), "widget", "normal", "high");
-    add_meta_box("ww-widget-preview", "Widget Preview", array(&$this, "meta_widget_preview"), "widget", "side", "high");
+    add_meta_box("ww-widget-preview", "Widget Preview", array(&$this, "meta_widget_preview"), "widget", "side", "default");
   }
   
   // Admin preview box
