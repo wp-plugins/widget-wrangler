@@ -17,9 +17,13 @@ function ww_postspage_form()
   
   print "<div class='wrap'>
           <h2>Posts page Widgets</h2>
-          <p>Set the widgets for your Posts page.</p>";
+          <p>Set the widgets for your Posts page.</p>
+          
+            <div id='widget-wrangler-form' class='new-admin-panel' style='width: 50%;'>
+              <form action='edit.php?post_type=widget&page=ww-postspage&ww-postspage-action=update&noheader=true' method='post' name='widget-wrangler-form'>";
+              
   print  ww_default_page_widgets($widgets);
-  print "</div>";
+  print "</div></form></div>";
 }
 /*
  * Save widgts on the default page.  Stored as wp_option

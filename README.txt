@@ -72,6 +72,10 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. WW Sidebar Widget
 
 == Changelog ==
+= 1.4.2 =
+
+* Bug fix: Posts page widgets not saving correctly
+
 = 1.4.1 =
 
 * Bug fix: Forgot to add new images to svn
@@ -154,4 +158,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.4.1 Minor bug fix with css images
+1.4.2 Bug fix for Posts page widgets not saving correctly

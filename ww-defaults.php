@@ -13,9 +13,12 @@ function ww_theme_defaults_page()
   
   print "<div class='wrap'>
           <h2>Default Widgets</h2>
-          <p>Set the default widgets for your sidebar.</p>";
+          <p>Set the default widgets for your sidebar.</p>
+            <div id='widget-wrangler-form' class='new-admin-panel' style='width: 50%;'>
+              <form action='edit.php?post_type=widget&page=ww-defaults&ww-defaults-action=update&noheader=true' method='post' name='widget-wrangler-form'>";
+              
   print  ww_default_page_widgets($defaults_array);
-  print "</div>";
+  print "</div></form></div>";
 }
 /*
  * Save widgts on the default page.  Stored as wp_option
@@ -78,8 +81,6 @@ function ww_default_page_widgets($defaults_array)
   // start output
   $output = array();
   $output['open'] = "
-            <div id='widget-wrangler-form' class='new-admin-panel' style='width: 50%;'>
-              <form action='edit.php?post_type=widget&page=ww-defaults&ww-defaults-action=update&noheader=true' method='post' name='widget-wrangler-form'>
               <div class='outer'>
                 <input value='true' type='hidden' name='widget-wrangler-edit' />
                 <input type='hidden' name='ww_noncename' id='ww_noncename' value='" . wp_create_nonce( plugin_basename(__FILE__) ) . "' />";
@@ -98,9 +99,8 @@ function ww_default_page_widgets($defaults_array)
   
   $output['close'] = " <!-- .inner -->
                </div><!-- .outer -->
-               <input class='button' name='ww-save-default' type='submit' value='Save' />
-               </form>
-             </div>";
+               <input class='button' name='ww-save-default' type='submit' value='Save' />";
+               
   if(is_array($output['active']))
   {
     foreach($output['active'] as $sidebar => $unsorted_widgets)
