@@ -55,7 +55,7 @@ The other way requires you to edit your template files and find any instance of 
 In the widget-wrangler directory there is a file named 'widget-template.php'.  Copy this file to your theme's root directory and rename it 'widget.php'.  You can edit the HTML in the file to have widgets defaultly appear as you want.
 To template specific widgets, save a copy of widget-template.php as widget-[widget ID].php in your theme directory. (eg. widget-121.php, where 121 is the widget's ID)
 
-= Can I use existing wordpress widgets? = 
+= Can I use existing wordpress widgets? =
 
 Mostly. Widgets designed for Wordpress 3+ are able to be used with the 'Clone WP Widget' option in the Widget Wrangler menu.  Widgets programmed for older versions of wordpress may not work.
 
@@ -72,6 +72,10 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. WW Sidebar Widget
 
 == Changelog ==
+= 1.4.3 =
+
+* Bug fix: Javascript not loading correctly on admin pages in the footer.
+
 = 1.4.2 =
 
 * Bug fix: Posts page widgets not saving correctly
@@ -127,7 +131,7 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 
 = 1.1rc6 =
 
-* Fix for disappearing menu items with wordpress 3.1 update.  
+* Fix for disappearing menu items with wordpress 3.1 update.
 
 = 1.1rc5 =
 
@@ -145,7 +149,7 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 
 = 1.1rc2 =
 
-* Found another important bug related to recent changes. 
+* Found another important bug related to recent changes.
 
 = 1.1rc1 =
 
@@ -158,4 +162,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.4.2 Bug fix for Posts page widgets not saving correctly
+1.4.3 Bug fix javascript not loading correctly on admin pages in the footer.

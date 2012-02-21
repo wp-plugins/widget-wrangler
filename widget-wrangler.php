@@ -4,13 +4,13 @@ Plugin Name: Widget Wrangler
 Plugin URI: http://www.widgetwrangler.com
 Description: Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis. It also provides widgets as a post type, the ability to clone existing wordpress widgets, and granular control over widgets' templates.
 Author: Jonathan Daggerhart
-Version: 1.4.2
+Version: 1.4.3
 Author URI: http://www.daggerhart.com
 License: GPL2
 */
 /*  Copyright 2010  Jonathan Daggerhart  (email : jonathan@daggerhart.com)
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License, version 2, as 
+  it under the terms of the GNU General Public License, version 2, as
   published by the Free Software Foundation.
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -161,10 +161,10 @@ function ww_settings_page_handler()
         ww_settings_reset_widgets();
         break;
     }
-    wp_redirect(get_bloginfo('wpurl').'/wp-admin/edit.php?post_type=widget&page=ww-settings');  
+    wp_redirect(get_bloginfo('wpurl').'/wp-admin/edit.php?post_type=widget&page=ww-settings');
   }
   else{
-    ww_settings_form();    
+    ww_settings_form();
   }
 }
 /*
@@ -204,7 +204,7 @@ function ww_get_all_widgets()
               post_type = 'widget' AND
               post_status = 'publish'";
   $widgets = $wpdb->get_results($query);
-  
+
   $i=0;
   $total = count($widgets);
   while($i < $total)
@@ -248,10 +248,10 @@ function ww_theme_single_widget($widget)
   if ($widget->wpautop == "on"){
     $widget->post_content = wpautop($widget->post_content);
   }
-  
+
   // apply shortcode
-  $widget->post_content = do_shortcode($widget->post_content);  
-  
+  $widget->post_content = do_shortcode($widget->post_content);
+
   // see if this should use advanced parsing
   if($widget->adv_enabled){
     $themed = ww_adv_parse_widget($widget);
@@ -259,17 +259,17 @@ function ww_theme_single_widget($widget)
   else{
     $themed = ww_template_widget($widget);
   }
-  
+
   return $themed;
 }
 /*
  * Look for possible custom templates, then default to widget-template.php
  * @return templated widget
- */ 
+ */
 function ww_template_widget($widget)
 {
   ob_start();
-  
+
   // look for template in theme folder w/ widget ID first
   if (file_exists(TEMPLATEPATH . "/widget-".$widget->ID.".php")){
     include TEMPLATEPATH . "/widget-".$widget->ID.".php";
@@ -283,7 +283,7 @@ function ww_template_widget($widget)
     include WW_PLUGIN_DIR. '/widget-template.php';
   }
   $templated = ob_get_clean();
-  
+
   return $templated;
 }
 /*
@@ -295,10 +295,10 @@ function ww_adv_parse_widget($widget)
   // make $post and $page available
   global $post;
   $page = $post;
-  
+
   // handle advanced templating
   if($widget->adv_template)
-  {  
+  {
     $returned_array = eval('?>'.$widget->parse);
     if (is_array($returned_array)){
       $widget->post_title = $returned_array['title'];
@@ -313,10 +313,10 @@ function ww_adv_parse_widget($widget)
   {
     $pattern = array('/{{title}}/','/{{content}}/');
     $replace = array($widget->post_title, $widget->post_content);
-    
+
     // find and replace title and content tokens
     $parsed = preg_replace($pattern,$replace,$widget->parse);
-    
+
     // execute adv parsing area
     ob_start();
       eval('?>'.$parsed);
@@ -324,7 +324,7 @@ function ww_adv_parse_widget($widget)
       // fix for recent post widget not resetting the query
       $post = $page;
   }
-  
+
   return $output;
 }
 /*
@@ -350,7 +350,7 @@ function ww_dynamic_sidebar($sidebar_slug = 'default')
   global $post;
   $sidebars = ww_get_all_sidebars();
   $output = '';
-  
+
   // see if this is the Posts (blog) page
   if(is_home() && (get_option('show_on_front') == 'posts') && $postspage_string = get_option('ww_postspage_widgets')){
     $widgets_array = unserialize($postspage_string);
@@ -371,7 +371,7 @@ function ww_dynamic_sidebar($sidebar_slug = 'default')
   {
     $i = 0;
     $total = count($widgets_array[$sidebar_slug]);
-    
+
     // custom sorting with callback
     usort($widgets_array[$sidebar_slug],'ww_cmp');
     $sorted_widgets = array_reverse($widgets_array[$sidebar_slug]);
@@ -383,7 +383,7 @@ function ww_dynamic_sidebar($sidebar_slug = 'default')
       $i++;
     }
   }
-  
+
   print $output;
 }
 /*
@@ -399,13 +399,13 @@ function ww_get_settings()
     ww_settings_set_default();
     $settings = ww_get_settings();
   }
-  
+
   // update 1.3 & 1.3.1 fix force a post_types setting
   if($settings['post_types'][0] == "" || empty($settings['post_types'])){
     $settings['post_types'] = array('page');
     update_option("ww_settings", serialize($settings));
   }
-  
+
   return $settings;
 }
 /*
@@ -421,7 +421,7 @@ function ww_settings_set_default()
 
 /**
  * Taken from wp-includes/widgets.php, adjusted for my needs
- * 
+ *
  * @param string $widget the widget's PHP class name (see default-widgets.php)
  * @param array $instance the widget's instance settings
  * @return void
@@ -431,28 +431,28 @@ function ww_the_widget($widget, $instance = array())
   // load widget from widget factory ?
   global $wp_widget_factory;
   $widget_obj = $wp_widget_factory->widgets[$widget];
- 
+
   if ( !is_a($widget_obj, 'WP_Widget') )
    return;
- 
+
   // args for spliting title from content
   $args = array('before_widget'=>'','after_widget'=>'','before_title'=>'','after_title'=>'[explode]');
- 
+
   // output to variable for replacements
   ob_start();
      $widget_obj->widget($args, $instance);
   $temp = ob_get_clean();
-  
+
   // get title and content separate
   $array = explode("[explode]", $temp);
-  
+
   // prep object for template
   $obj                = new stdClass();
   $obj->ID            = $instance['ID'];
   $obj->post_name     = $instance['post_name'];
   $obj->post_title    = ($array[0]) ? $array[0]: $instance['title'];
   $obj->post_content  = $array[1];
-  
+
   // template with WW template
   print ww_template_widget($obj);
 }

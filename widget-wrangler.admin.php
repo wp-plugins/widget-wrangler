@@ -8,17 +8,17 @@
 function ww_admin_init()
 {
   $settings = ww_get_settings();
-  
+
   // eventually I will handle access control this way
   $show_panel = true;
-  
+
   if ($show_panel)
   {
     // Add panels into the editing sidebar(s)
     foreach($settings['post_types'] as $post_type){
       add_meta_box('ww_admin_meta_box', __('<img src="'.WW_PLUGIN_URL.'/images/wrangler_icon.png" />Widget Wrangler'), 'ww_admin_sidebar_panel', $post_type, 'normal', 'high');
     }
-    
+
     // Add some CSS to the admin header on the widget wrangler pages, and edit pages
     if((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') ||
         (isset($_GET['page']) &&
@@ -48,31 +48,31 @@ function ww_admin_sidebar_panel($pid)
 {
   // dirty hack to get post id, prob a better way.
   $pid = $_GET['post'];
-  
+
   if (is_numeric($pid))
   {
     // put into array
-    $all_widgets = ww_get_all_widgets(); 
+    $all_widgets = ww_get_all_widgets();
     $sidebars = ww_get_all_sidebars();
     $sorted_widgets = array();
     $output = array();
     $active_array = array();
     $default_message = "Defaults are Not Defined, click <a href='/edit.php?post_type=widget&page=ww-defaults'>here</a> to select your default widgets.";
-    
+
     // get post meta for this post
     // array of chosen widgets
     if ($active = get_post_meta($pid,'ww_post_widgets',TRUE))
     {
       $active_array = unserialize($active);
       $default_message = "Defaults are Disabled. This page is wrangling widgets on its own.";
-    }  
+    }
     elseif($default_widgets = get_option('ww_default_widgets'))
     {
-      // pull default widgets 
+      // pull default widgets
       $active_array = unserialize($default_widgets);
       $default_message = "This page is using the <a href='/edit.php?post_type=widget&page=ww-defaults'>Defaults Widgets</a>.";
     }
-    
+
     $output['open'] = "
               <div id='widget-wrangler-form' class='new-admin-panel'>
                   <div class='outer'>
@@ -81,18 +81,18 @@ function ww_admin_sidebar_panel($pid)
                     </div>
                     <input value='true' type='hidden' name='widget-wrangler-edit' />
                     <input type='hidden' name='ww_noncename' id='ww_noncename' value='" . wp_create_nonce( plugin_basename(__FILE__) ) . "' />";
-  
+
     $output['close'] = " <!-- .inner -->
                     <hr />
                     <label><input type='checkbox' name='ww-reset-widgets-to-default' value='on' /> Reset this page to the default widgets.</label>
                  </div><!-- .outer -->
                </div>";
-               
+
     // merge the widget arrays into the output array
     if (count($all_widgets) > 0){
       $output = array_merge(ww_create_widget_list($all_widgets, $active_array, $sidebars), $output);
     }
-    
+
     // sort the sidebar's widgets
     if ($output['active']){
       foreach($output['active'] as $sidebar => $unsorted_widgets){
@@ -101,7 +101,7 @@ function ww_admin_sidebar_panel($pid)
         }
       }
     }
-    
+
     // theme it out
     ww_theme_admin_panel($output);
   }
@@ -123,25 +123,25 @@ function ww_create_widget_list($widgets, $ref_array, $sidebars)
     if ($widget->post_title == ""){
       $widget->post_title = "(no title) - Widget ID: ".$widget->ID;
     }
-    
+
     // look for appropriate sidebar, default to disabled
     if ($keys[0] == '' || (!array_key_exists($keys[0], $sidebars))){
       $keys[0] = "disabled";
     }
-    
+
     // setup initial info
     $sidebar_slug = $keys[0];
-   
+
     // get weight
     $weight = $ref_array[$sidebar_slug][$keys[1]]['weight'];
-    
+
     // build select box
     $sidebars_options = "<option value='disabled'>Disabled</option>";
     foreach($sidebars as $slug => $sidebar){
       ($slug == $sidebar_slug) ? $selected = "selected='selected'" : $selected = '';
-      $sidebars_options.= "<option name='".$slug."' value='".$slug."' ".$selected.">".$sidebar."</option>";   
+      $sidebars_options.= "<option name='".$slug."' value='".$slug."' ".$selected.">".$sidebar."</option>";
     }
-    
+
     // add item to our temp array
     $temp[$weight] = "<li class='ww-item ".$sidebar_slug." nojs' width='100%'>
                         <input class='ww-widget-weight' name='ww-".$widget->post_name."-weight' type='text' size='2' value='$weight' />
@@ -152,7 +152,7 @@ function ww_create_widget_list($widgets, $ref_array, $sidebars)
                         <input class='ww-widget-id' name='ww-id-".$widget->ID."' type='hidden' value='".$widget->ID."' />
                         ".$widget->post_title."
                       </li>";
-                      
+
     // place into output array
     if ($sidebar_slug == 'disabled'){
       $output['disabled'][] = $temp[$weight];
@@ -160,7 +160,7 @@ function ww_create_widget_list($widgets, $ref_array, $sidebars)
     else{
       $output['active'][$sidebar_slug][$weight] = $temp[$weight];
     }
-    
+
     $i++;
   }
   return $output;
@@ -172,7 +172,7 @@ function ww_theme_admin_panel($panel_array)
 {
   $sidebars = ww_get_all_sidebars();
   $output = $panel_array['open'];
-  
+
   // loop through sidebars and add active widgets to list
   if (is_array($sidebars))
   {
@@ -181,7 +181,7 @@ function ww_theme_admin_panel($panel_array)
       // open the list
       $output.= "<h4>".$sidebar."</h4>";
       $output.= "<ul name='".$slug."' id='ww-sidebar-".$slug."-items' class='inner ww-sortable' width='100%'>";
-      
+
       if (is_array($panel_array['active'][$slug])) {
         // loop through sidebar array and add items to list
         foreach($panel_array['active'][$slug] as $item){
@@ -197,10 +197,10 @@ function ww_theme_admin_panel($panel_array)
       $output.= "</ul>";
     }
   }
-  
+
   // disabled list
   $output.= "<h4>Disabled</h4><ul name='disabled' id='ww-disabled-items' class='inner ww-sortable' width='100%'>";
-  
+
   // loop through and add disabled widgets to list
   if (is_array($panel_array['disabled'])){
     foreach ($panel_array['disabled'] as $disabled){
@@ -214,9 +214,9 @@ function ww_theme_admin_panel($panel_array)
   // close disabled list
   $output.= "<li class='ww-no-widgets' ".$style.">No disabled Widgets</li>";
   $output.= "</ul>";
-  
+
   $output.= $panel_array['close'];
-  
+
   print $output;
 }
 /*
@@ -235,16 +235,16 @@ function ww_save_post($id)
   if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
     return $id;
   }
-  
+
   // Check permissions
   $settings = ww_get_settings();
   if (in_array($_POST['post_type'], $settings['post_types']) && !current_user_can('edit_page', $id)){
     return $id;
   }
-  
+
   // OK, we're authenticated: we need to find and save the data
   $all_widgets = ww_get_all_widgets();
-  
+
   $i = 1;
   // loop through all widgets looking for those submitted
   foreach($all_widgets as $key => $widget)
@@ -252,7 +252,7 @@ function ww_save_post($id)
     $name = $_POST["ww-".$widget->post_name];
     $weight = $_POST["ww-".$widget->post_name."-weight"];
     $sidebar = $_POST["ww-".$widget->post_name."-sidebar"];
-    
+
     // if something was submitted without a weight, make it neutral
     if ($weight < 1){
       $weight = $i;
@@ -269,26 +269,26 @@ function ww_save_post($id)
     }
     $i++;
   }
-  
-  // if none are defined, save an empty array 
+
+  // if none are defined, save an empty array
   if(count($active_widgets) == 0){
-    $active_widgets = array();    
+    $active_widgets = array();
   }
-  
+
   //save what we have
   $this_post_widgets = serialize($active_widgets);
   update_post_meta( $id, 'ww_post_widgets', $this_post_widgets);
-  
+
   // get defaults without- disabled for comparison
   $defaults = unserialize(get_option('ww_default_widgets'));
   unset($defaults['disabled']);
   $defaults = serialize($defaults);
-  
+
   // last minute check for reset to defaults for this page
   if($_POST['ww-reset-widgets-to-default'] == "on" ||
      ($this_post_widgets == $defaults))
   {
-    delete_post_meta( $id, 'ww_post_widgets'); 
+    delete_post_meta( $id, 'ww_post_widgets');
   }
 }
 /* ==================================== WORDPRESS HOOK FUNCTIONS ===== */
@@ -302,13 +302,12 @@ function ww_single_widget_shortcode($atts) {
 }
 /*
  * Javascript drag and drop for sorting
- */ 
+ */
 function ww_admin_js(){
   wp_enqueue_script('ww-admin-js',
                   plugins_url('/ww-admin.js', __FILE__ ),
                   array('jquery-ui-core', 'jquery-ui-sortable'),
-                  false,
-                  true);
+                  false);
 }
 /*
  * Javascript for drag and drop sidebar sorting
@@ -317,8 +316,7 @@ function ww_sidebar_js(){
   wp_enqueue_script('ww-sidebar-js',
                     plugins_url('/ww-sidebars.js', __FILE__ ),
                     array('jquery-ui-core', 'jquery-ui-sortable'),
-                    false,
-                    true);
+                    false);
 }
 /*
  * Handle CSS necessary for Admin Menu on left
@@ -331,7 +329,7 @@ function ww_adjust_css(){
   if ($_GET['post_type'] == 'widget')
   {
     print "#wpbody-content #icon-edit {
-             background: transparent url('".WW_PLUGIN_URL."/images/wrangler_post_icon.png') no-repeat top left; 
+             background: transparent url('".WW_PLUGIN_URL."/images/wrangler_post_icon.png') no-repeat top left;
            }";
   }
   print  "</style>";
