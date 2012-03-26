@@ -6,7 +6,7 @@ class Widget_Wrangler {
   var $meta_fields = array("ww-adv-enabled","ww-parse","ww-wpautop","ww-adv-template");
   var $settings = array();
   var $capability_type;
-     
+
   /*
    * Constructor, build the new post type
    */
@@ -28,7 +28,7 @@ class Widget_Wrangler {
       'search_items' => __('Search Widgets'),
       'menu_icon' => WW_PLUGIN_DIR.'/icon-wrangler.png',
       'not_found' =>  __('No widgets found'),
-      'not_found_in_trash' => __('No widgets found in Trash'), 
+      'not_found_in_trash' => __('No widgets found in Trash'),
       'parent_item_colon' => '',
     );
     // Register custom post types
@@ -46,29 +46,29 @@ class Widget_Wrangler {
       'supports' => array('title','excerpt','editor' /*,'custom-fields'*/), // Let's use custom fields for debugging purposes only
       'menu_icon' => WW_PLUGIN_URL.'/images/wrangler_icon.png'
     ));
-   
+
     add_filter("manage_edit-widget_columns", array(&$this, "edit_columns"));
     add_action("manage_posts_custom_column", array(&$this, "custom_columns"));
-   
+
     // Admin interface init
     add_action("admin_init", array(&$this, "admin_init"));
     //add_action("template_redirect", array(&$this, 'template_redirect'));
-    
+
     // Insert post hook
     add_action("wp_insert_post", array(&$this, "wp_insert_post"), 10, 2);
   }
   /*
    * Custom columns for the main Widgets management page
-   */  
+   */
   function edit_columns($columns)
   {
     $columns = array(
-      "cb" => "<input type=\"checkbox\" />",
+      "cb" => "<input type=\"checkbox\" /><input type=\"hidden\" name=\"quickedit\" value=\"true\" />",
       "title" => "Widget Title",
       "ww_description" => "Description",
       "ww_adv_enabled" => "Adv Parse",
     );
-   
+
     return $columns;
   }
   /*
@@ -88,12 +88,16 @@ class Widget_Wrangler {
        break;
     }
   }
-  
+
   /*
    * When a post is inserted or updated
-   */ 
+   */
   function wp_insert_post($post_id, $post = null)
   {
+    //Check if this call results from another event, like the "Quick Edit" option
+    // http://wordpress.org/support/topic/plugin-widget-wrangler-adv-parsing-gets-lost-after-quickedit
+			 if ($_POST['quickedit'] != "true")  { return; }
+
     if ($post->post_type == "widget")
     {
       // Loop through the POST data
@@ -105,7 +109,7 @@ class Widget_Wrangler {
          delete_post_meta($post_id, $key);
          continue;
         }
-     
+
         // If value is a string it should be unique
         if (!is_array($value))
         {
@@ -120,7 +124,7 @@ class Widget_Wrangler {
         {
           // If passed along is an array, we should remove all previous data
           delete_post_meta($post_id, $key);
-          
+
           // Loop through the array adding new values to the post meta as different entries with the same name
           foreach ($value as $entry){
             add_post_meta($post_id, $key, $entry);
@@ -132,13 +136,13 @@ class Widget_Wrangler {
   /*
    * Add meta box to widget posts
    */
-  function admin_init() 
+  function admin_init()
   {
     // Custom meta boxes for the edit widget screen
     add_meta_box("ww-parse", "Options", array(&$this, "meta_parse"), "widget", "normal", "high");
     add_meta_box("ww-widget-preview", "Widget Preview", array(&$this, "meta_widget_preview"), "widget", "side", "default");
   }
-  
+
   // Admin preview box
   function meta_widget_preview(){
     global $post;
@@ -153,24 +157,24 @@ class Widget_Wrangler {
       <?php
     }
   }
-  
+
   // Admin post meta contents
   function meta_parse()
   {
     global $post;
-    
+
     // post custom data
     $custom = get_post_custom($post->ID);
     $parse = $custom["ww-parse"][0];
     $adv_enabled = $custom["ww-adv-enabled"][0];
     $adv_template = $custom["ww-adv-template"][0];
     $wpautop = $custom["ww-wpautop"][0];
-    
+
     // default to checked upon creation
     $adv_checked = (isset($adv_enabled)) ? 'checked="checked"' : '';
     $adv_template_checked = (isset($adv_template)) ? 'checked="checked"' : '';
     $wpautop_checked = (isset($wpautop) || (($_GET['action'] == null) && ($_GET['post_type'] == 'widget'))) ? 'checked="checked"' : '';
-    
+
     ?><div id="ww-template">
         <div class="ww-widget-postid">Post ID<br/><span><?php print $post->ID;?></span></div>
         <div>
