@@ -63,7 +63,7 @@ class Widget_Wrangler {
   function edit_columns($columns)
   {
     $columns = array(
-      "cb" => "<input type=\"checkbox\" /><input type=\"hidden\" name=\"quickedit\" value=\"true\" />",
+      "cb" => "<input type=\"checkbox\" />",
       "title" => "Widget Title",
       "ww_description" => "Description",
       "ww_adv_enabled" => "Adv Parse",
@@ -176,6 +176,7 @@ class Widget_Wrangler {
     $wpautop_checked = (isset($wpautop) || (($_GET['action'] == null) && ($_GET['post_type'] == 'widget'))) ? 'checked="checked"' : '';
 
     ?><div id="ww-template">
+        <input type="hidden" name="quickedit" value="true" />
         <div class="ww-widget-postid">Post ID<br/><span><?php print $post->ID;?></span></div>
         <div>
           <label><input type="checkbox" name="ww-wpautop" <?php print $wpautop_checked; ?> /> Automatically add Paragraphs to this Widget's Content</label>

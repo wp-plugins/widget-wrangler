@@ -72,6 +72,10 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. WW Sidebar Widget
 
 == Changelog ==
+= 1.4.5 =
+
+* Bug fix: Last bug fix caused new problem.  Breaks widget save for advanced parsing area.  Skip 1.4.4, or upgrade immediately.
+
 = 1.4.4 =
 
 * Bug fix: Quickediting a widget lost some data.
@@ -166,4 +170,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.4.4 Bug fix: Quickediting a widget lost some data.
+1.4.5 Bug fix: Last fix caused additional problem, if using 1.4.4, please update immediately
