@@ -1,9 +1,9 @@
 === Widget Wrangler ===
 Contributors: daggerhart
-Donate link: http://www.daggerhart.com/wordpress/widget-wrangler#donate
+Donate link: http://widgetwrangler.com
 Tags: widget, admin, widgets, administration, sidebar, manage
 Requires at least: 3
-Tested up to: 3.2.1
+Tested up to: 3.7.1
 Stable tag: trunk
 
 A plugin for managing the display of widgets on a page by page basis. Using widgets as a post type.
@@ -72,6 +72,15 @@ When you Clone a wordpress widget, it creates a new widget post in the Widget Wr
 1. WW Sidebar Widget
 
 == Changelog ==
+= 1.4.6 =
+
+* Bug fix: Child theme template discovery
+* Bug fix: Escape dollar sign in content & title 
+* Feature: Exclude from search
+* Feature: Template widget with widget-post_name.php
+* Added versioning
+* More WP_DEBUG friendly
+
 = 1.4.5 =
 
 * Bug fix: Last bug fix caused new problem.  Breaks widget save for advanced parsing area.  Skip 1.4.4, or upgrade immediately.
@@ -170,4 +179,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.4.5 Bug fix: Last fix caused additional problem, if using 1.4.4, please update immediately
+1.4.6 Bug fixes & maintenance updates

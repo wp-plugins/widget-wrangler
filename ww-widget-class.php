@@ -35,6 +35,7 @@ class Widget_Wrangler {
     register_post_type('widget', array(
       'labels' =>$labels,
       'public' => true,
+			'exclude_from_search' => (isset($settings['exclude_from_search']) && $settings['exclude_from_search'] == 1) ? true : false,
       'show_in_menu' => true,
       'show_ui' => true, // UI in admin panel
       '_builtin' => false, // It's a custom post type, not built in
@@ -84,7 +85,7 @@ class Widget_Wrangler {
        the_excerpt();
        break;
       case "ww_adv_enabled":
-       echo $custom["ww-adv-enabled"][0];
+       echo (isset($custom["ww-adv-enabled"])) ? $custom["ww-adv-enabled"][0] : "";
        break;
     }
   }
@@ -96,7 +97,7 @@ class Widget_Wrangler {
   {
     //Check if this call results from another event, like the "Quick Edit" option
     // http://wordpress.org/support/topic/plugin-widget-wrangler-adv-parsing-gets-lost-after-quickedit
-			 if ($_POST['quickedit'] != "true")  { return; }
+		if ($_POST['quickedit'] != "true")  { return; }
 
     if ($post->post_type == "widget")
     {
@@ -149,11 +150,18 @@ class Widget_Wrangler {
     if ($post->ID)
     {
       $widget = ww_get_single_widget($post->ID);
+			$preview = ww_theme_single_widget($widget);
+			$preview_balance = balanceTags($preview, true);
       ?>
         <div id="ww-preview">
           <p><em>This preview does not include your theme's CSS stylesheet.</em></p>
-          <?php print ww_theme_single_widget($widget); ?>
+          <?php	print $preview_balance; ?>
         </div>
+				<?php if ($preview != $preview_balance) { ?>
+					<div style="border-top: 1px solid #bbb; margin-top: 12px; padding-top: 8px;">
+						<span style="color: red; font-style: italic;">Your widget may contain some broken or malformed html.</span> Wordpress balanced the tags in this preview in an attempt to prevent the page from breaking, but it will not do so on normal widget display.
+					</div>
+				<?php } ?>
       <?php
     }
   }
@@ -165,10 +173,10 @@ class Widget_Wrangler {
 
     // post custom data
     $custom = get_post_custom($post->ID);
-    $parse = $custom["ww-parse"][0];
-    $adv_enabled = $custom["ww-adv-enabled"][0];
-    $adv_template = $custom["ww-adv-template"][0];
-    $wpautop = $custom["ww-wpautop"][0];
+    $parse = isset($custom["ww-parse"]) ? $custom["ww-parse"][0] : NULL;
+    $adv_enabled = isset($custom["ww-adv-enabled"]) ? $custom["ww-adv-enabled"][0] : NULL;
+    $adv_template = isset($custom["ww-adv-template"]) ? $custom["ww-adv-template"][0] : NULL;
+    $wpautop = isset($custom["ww-wpautop"]) ? $custom["ww-wpautop"][0] : NULL;
 
     // default to checked upon creation
     $adv_checked = (isset($adv_enabled)) ? 'checked="checked"' : '';

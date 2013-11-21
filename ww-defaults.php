@@ -101,7 +101,7 @@ function ww_default_page_widgets($defaults_array)
                </div><!-- .outer -->
                <input class='button' name='ww-save-default' type='submit' value='Save' />";
                
-  if(is_array($output['active']))
+  if(isset($output['active']) && is_array($output['active']))
   {
     foreach($output['active'] as $sidebar => $unsorted_widgets)
     {

@@ -4,8 +4,8 @@ Plugin Name: Widget Wrangler
 Plugin URI: http://www.widgetwrangler.com
 Description: Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis. It also provides widgets as a post type, the ability to clone existing wordpress widgets, and granular control over widgets' templates.
 Author: Jonathan Daggerhart
-Version: 1.4.5
-Author URI: http://www.daggerhart.com
+Version: 1.4.6
+Author URI: http://www.websmiths.co
 License: GPL2
 */
 /*  Copyright 2010  Jonathan Daggerhart  (email : jonathan@daggerhart.com)
@@ -22,6 +22,12 @@ License: GPL2
 */
 define('WW_PLUGIN_DIR', dirname(__FILE__));
 define('WW_PLUGIN_URL', get_bloginfo('wpurl')."/wp-content/plugins/widget-wrangler");
+
+// versioning for now
+define('WW_VERSION', 1.46);
+if (!get_option('ww_version')){
+	add_option('ww_version', WW_VERSION);
+}
 
 // add the widget post type class
 include WW_PLUGIN_DIR.'/ww-widget-class.php';
@@ -56,7 +62,7 @@ function Widget_Wrangler_Init() {
 function ww_menu()
 {
   $clone    = add_submenu_page( 'edit.php?post_type=widget', 'Clone WP Widget', 'Clone WP Widget',  'manage_options', 'ww-clone',    'ww_clone_page_handler');
-  $defaults = add_submenu_page( 'edit.php?post_type=widget', 'Default Widgets', 'Default WIdgets',     'manage_options', 'ww-defaults', 'ww_defaults_page_handler');
+  $defaults = add_submenu_page( 'edit.php?post_type=widget', 'Default Widgets', 'Default Widgets',     'manage_options', 'ww-defaults', 'ww_defaults_page_handler');
   // only show postspage widget setting if post page is the front page
   if(get_option('show_on_front') == 'posts'){
     $postspage= add_submenu_page( 'edit.php?post_type=widget', 'Posts Page',      'Posts Page Widgets',       'manage_options', 'ww-postspage','ww_postspage_page_handler');
@@ -87,7 +93,7 @@ function ww_postspage_page_handler()
 {
   include WW_PLUGIN_DIR.'/ww-postspage.php';
   // save Posts page widgets if posted
-  if ($_GET['ww-postspage-action']){
+  if (isset($_GET['ww-postspage-action'])){
     switch($_GET['ww-postspage-action']){
       case 'update':
         $defaults_array = ww_postspage_save_widgets($_POST);
@@ -105,7 +111,7 @@ function ww_postspage_page_handler()
 function ww_sidebars_page_handler()
 {
   include WW_PLUGIN_DIR.'/ww-sidebars.php';
-  if($_GET['ww-sidebar-action']){
+  if(isset($_GET['ww-sidebar-action'])){
     switch($_GET['ww-sidebar-action']){
       case 'insert':
         $new_sidebar_id = ww_sidebar_insert($_POST);
@@ -131,7 +137,7 @@ function ww_sidebars_page_handler()
 function ww_clone_page_handler()
 {
   include WW_PLUGIN_DIR.'/ww-clone.php';
-  if($_GET['ww-clone-action']){
+  if(isset($_GET['ww-clone-action'])){
     switch($_GET['ww-clone-action']){
       case 'insert':
         // create new cloned widget
@@ -152,7 +158,7 @@ function ww_clone_page_handler()
 function ww_settings_page_handler()
 {
   include WW_PLUGIN_DIR.'/ww-settings.php';
-  if ($_GET['ww-settings-action']){
+  if (isset($_GET['ww-settings-action'])){
     switch($_GET['ww-settings-action']){
       case "save":
         ww_settings_save($_POST);
@@ -174,7 +180,7 @@ function ww_defaults_page_handler()
 {
   include WW_PLUGIN_DIR."/ww-defaults.php";
   // save defaults if posted
-  if ($_GET['ww-defaults-action']){
+  if (isset($_GET['ww-defaults-action'])){
     switch($_GET['ww-defaults-action']){
       case 'update':
         $defaults_array = ww_save_default_widgets($_POST);
@@ -270,16 +276,23 @@ function ww_template_widget($widget)
 {
   ob_start();
 
-  // look for template in theme folder w/ widget ID first
-  if (file_exists(TEMPLATEPATH . "/widget-".$widget->ID.".php")){
-    include TEMPLATEPATH . "/widget-".$widget->ID.".php";
-  }
-  // fallback to standard widget template in theme
-  else if (file_exists(TEMPLATEPATH . "/widget.php")){
-    include TEMPLATEPATH . "/widget.php";
-  }
+	$found = false;
+	$suggestions = array(
+		"widget-".$widget->ID.".php",
+		"widget-".$widget->post_name.".php",
+		"widget.php",
+	);
+	
+	foreach ($suggestions as $suggestion){
+		if ($found_path = locate_template($suggestion, false, false)){
+			$found = true;
+			include $found_path;
+			break;
+		}
+	}
+	
   // fallback on default template
-  else{
+	if (!$found) {
     include WW_PLUGIN_DIR. '/widget-template.php';
   }
   $templated = ob_get_clean();
@@ -309,20 +322,23 @@ function ww_adv_parse_widget($widget)
       $output = "<!-- Error:  This widget did not return an array. -->";
     }
   }
-  else
+ else
   {
-    $pattern = array('/{{title}}/','/{{content}}/');
-    $replace = array($widget->post_title, $widget->post_content);
-
-    // find and replace title and content tokens
-    $parsed = preg_replace($pattern,$replace,$widget->parse);
-
     // execute adv parsing area
     ob_start();
-      eval('?>'.$parsed);
-      $output = ob_get_clean();
-      // fix for recent post widget not resetting the query
-      $post = $page;
+      eval('?>'.$widget->parse);
+		$output = ob_get_clean();
+
+		// find and replace title and content tokens
+		// this should happen after eval() to prevent code-like content from attempting to execute
+		// use str_replace to avoid $<digits> issue with preg_replace
+		// replace \$ with $ for backwards compat w/ users who have added their own backslashes
+		$search = array('{{title}}','{{content}}', '\$');
+    $replace = array($widget->post_title, $widget->post_content, '$');
+		$output = str_replace($search, $replace, $output);
+
+		// fix for recent post widget not resetting the query
+		$post = $page;		
   }
 
   return $output;
@@ -436,7 +452,7 @@ function ww_the_widget($widget, $instance = array())
    return;
 
   // args for spliting title from content
-  $args = array('before_widget'=>'','after_widget'=>'','before_title'=>'','after_title'=>'[explode]');
+  $args = array('before_widget'=>'','after_widget'=>'','before_title'=>'','after_title'=>'[eXpl0de]');
 
   // output to variable for replacements
   ob_start();
@@ -444,7 +460,7 @@ function ww_the_widget($widget, $instance = array())
   $temp = ob_get_clean();
 
   // get title and content separate
-  $array = explode("[explode]", $temp);
+  $array = explode("[eXpl0de]", $temp);
 
   // prep object for template
   $obj                = new stdClass();

@@ -133,7 +133,12 @@ function ww_create_widget_list($widgets, $ref_array, $sidebars)
     $sidebar_slug = $keys[0];
 
     // get weight
-    $weight = $ref_array[$sidebar_slug][$keys[1]]['weight'];
+    if (isset($keys[1]) && isset($ref_array[$sidebar_slug][$keys[1]]['weight'])){
+      $weight = $ref_array[$sidebar_slug][$keys[1]]['weight'];
+    }
+    else {
+      $weight = $i;
+    }
 
     // build select box
     $sidebars_options = "<option value='disabled'>Disabled</option>";
@@ -182,7 +187,7 @@ function ww_theme_admin_panel($panel_array)
       $output.= "<h4>".$sidebar."</h4>";
       $output.= "<ul name='".$slug."' id='ww-sidebar-".$slug."-items' class='inner ww-sortable' width='100%'>";
 
-      if (is_array($panel_array['active'][$slug])) {
+      if (isset($panel_array['active']) && is_array($panel_array['active'][$slug])) {
         // loop through sidebar array and add items to list
         foreach($panel_array['active'][$slug] as $item){
           $output.= $item;
@@ -326,7 +331,7 @@ function ww_adjust_css(){
          li#menu-posts-widget a.wp-has-submenu {
           letter-spacing: -1px;
          }";
-  if ($_GET['post_type'] == 'widget')
+  if (isset($_GET['post_type']) && $_GET['post_type'] == 'widget')
   {
     print "#wpbody-content #icon-edit {
              background: transparent url('".WW_PLUGIN_URL."/images/wrangler_post_icon.png') no-repeat top left;

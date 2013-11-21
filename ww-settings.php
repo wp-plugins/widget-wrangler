@@ -6,11 +6,12 @@
 function ww_settings_form()
 {
   $settings = ww_get_settings();
-  
   // handle checkboxes
   if($settings['capabilities'] == 'simple') { $simple_checked =  "checked"; }
-  if($settings['capabilities'] == 'advanced') { $adv_checked = "checked"; } 
-  
+  if($settings['capabilities'] == 'advanced') { $adv_checked = "checked"; }
+  $advanced_capability = isset($settings['advanced']) ? $settings['advanced'] : "";
+  $exclude_from_search_checked = (isset($settings['exclude_from_search']) && $settings['exclude_from_search'] == 1) ? "checked='checked'" : "";
+
   /*
   global $wp_roles;
   if($settings['capabilities'] == 'roles') {
@@ -48,7 +49,7 @@ function ww_settings_form()
             A simple use of this setting would be to change the Capability Type to 'page'.  This would make it so that only users who can create and edit pages may create and edit widgets.
             <br />
           </p>
-          <label><input name="settings[advanced]" type="text" size="20" value="<?php print $settings['advanced']; ?>"/> Capability Type</label> 
+          <label><input name="settings[advanced]" type="text" size="20" value="<?php print $advanced_capability; ?>"/> Capability Type</label> 
           <br />
         </div>
         <h3 class="ww-settings-title">Post Types</h3>
@@ -59,6 +60,15 @@ function ww_settings_form()
             <textarea name="settings[post_types]" cols="60" rows="3"><?php if($settings['post_types']) { print implode(',', $settings['post_types']); } ?></textarea>
           </p>
         </div>
+        <h3 class="ww-settings-title">Exclude from search</h3>
+        <div class="ww-settings-field">
+          <p>
+						<label class="ww-checkbox">
+							<input name="settings[exclude_from_search]" type="checkbox" <?php print $exclude_from_search_checked; ?> /> - If checked, widgets will excluded from search results.
+						</label>
+          </p>
+        </div>
+				
         <input class="button" type="submit" value="Save Settings" />
       </form>
       
@@ -98,6 +108,7 @@ function ww_settings_save($post)
       unset($post_types[$i]);
     }
   }
+	$post['settings']['exclude_from_search'] = (isset($post['settings']['exclude_from_search'])) ? 1 : 0;
   $post['settings']['post_types'] = $post_types;
   $settings = serialize($post['settings']);
   
