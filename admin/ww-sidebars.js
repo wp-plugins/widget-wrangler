@@ -8,7 +8,7 @@
       function(){
         var slug = jQuery(this).children('input[name=ww-delete-slug]').val();
         
-        var ask = confirm('Whoa-there partner! Are you sure you want to delete this sidebar?');
+        var ask = confirm('Whoa-there partner! Are you sure you want to delete this corral?');
         if (ask) {
           return true;
         }
