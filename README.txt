@@ -84,6 +84,10 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 
 == Changelog ==
 
+= 1.5.1 =
+
+* Fix: bug with shortcodes not working.  Function was in wrong file.
+
 = 1.5 =
 
 * Changed sidebars to corrals in UI
@@ -201,4 +205,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.5 Better templating, theme compatibility setting, better clones, ui improvements.  If you use Query Wrangler, you should upgrade it to 1.5rc15+ before upgrading this for compatibility issues.
+1.5.1 Shortcode bug fix.  If you use Query Wrangler, you should upgrade it to 1.5rc15+ before upgrading this for compatibility issues.

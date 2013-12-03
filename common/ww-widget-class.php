@@ -146,7 +146,7 @@ class Widget_Wrangler {
         print ($rewrite) ? $rewrite : "&nbsp;";
         break;
 			case "ww_shortcode":
-				print "<code>[ww_widget  id=".$post->ID."]</code>";
+				print "[ww_widget  id=".$post->ID."]";
 				break;
     }
   }

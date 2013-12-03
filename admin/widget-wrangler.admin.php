@@ -308,14 +308,7 @@ function ww_save_post($id)
   }
 }
 /* ==================================== WORDPRESS HOOK FUNCTIONS ===== */
-/*
- * Shortcode support for all widgets
- */
-function ww_single_widget_shortcode($atts) {
-  $short_array = shortcode_atts(array('id' => ''), $atts);
-  extract($short_array);
-  return ww_theme_single_widget(ww_get_single_widget($id));
-}
+
 /*
  * Javascript drag and drop for sorting
  */
