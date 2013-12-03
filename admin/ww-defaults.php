@@ -1,4 +1,24 @@
 <?php
+
+/*
+ * Produce the Default Widgets Page
+ */
+function ww_defaults_page_handler()
+{
+  // save defaults if posted
+  if (isset($_GET['ww-defaults-action'])){
+    switch($_GET['ww-defaults-action']){
+      case 'update':
+        $defaults_array = ww_save_default_widgets($_POST);
+        break;
+    }
+    wp_redirect(get_bloginfo('wpurl').'/wp-admin/edit.php?post_type=widget&page=ww-defaults');
+  }
+  else{
+    ww_theme_defaults_page();
+  }
+}
+
 /*
  * Default widgets page
  */

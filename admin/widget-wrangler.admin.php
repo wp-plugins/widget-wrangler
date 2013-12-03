@@ -2,13 +2,15 @@
 /*
  * Widget Wrangler Admin Panel and related functions
  */
+function __jd($var){
+  //print '<pre>'.print_r($var,1).'</pre>';
+}
 /*
- * Display the plugin on admin screen
+ * Handle the display of the admin panels, and loading of js & css
  */
-function ww_admin_init()
-{
+function ww_display_admin_panel(){
   $settings = ww_get_settings();
-
+  
   // eventually I will handle access control this way
   $show_panel = true;
 
@@ -37,10 +39,8 @@ function ww_admin_init()
       add_action('admin_head', 'ww_admin_css');
     }
   }
-  add_action('admin_head', 'ww_adjust_css');
-  //disable autosave
-  //wp_deregister_script('autosave');
 }
+
 /*
  * Provide Widget Wrangler selection when editing a page
  */
@@ -187,7 +187,7 @@ function ww_theme_admin_panel($panel_array)
       $output.= "<h4>".$sidebar."</h4>";
       $output.= "<ul name='".$slug."' id='ww-sidebar-".$slug."-items' class='inner ww-sortable' width='100%'>";
 
-      if (isset($panel_array['active']) && is_array($panel_array['active'][$slug])) {
+      if (isset($panel_array['active'][$slug]) && is_array($panel_array['active'][$slug])) {
         // loop through sidebar array and add items to list
         foreach($panel_array['active'][$slug] as $item){
           $output.= $item;
@@ -198,7 +198,7 @@ function ww_theme_admin_panel($panel_array)
         $style = '';
       }
       // close the list
-      $output.= "<li class='ww-no-widgets' ".$style.">No Widgets in this sidebar.</li>";
+      $output.= "<li class='ww-no-widgets' ".$style.">No Widgets in this corral.</li>";
       $output.= "</ul>";
     }
   }
@@ -207,7 +207,7 @@ function ww_theme_admin_panel($panel_array)
   $output.= "<h4>Disabled</h4><ul name='disabled' id='ww-disabled-items' class='inner ww-sortable' width='100%'>";
 
   // loop through and add disabled widgets to list
-  if (is_array($panel_array['disabled'])){
+  if (isset($panel_array['disabled']) && is_array($panel_array['disabled'])){
     foreach ($panel_array['disabled'] as $disabled){
       $output.= $disabled;
     }
@@ -230,9 +230,20 @@ function ww_theme_admin_panel($panel_array)
  */
 function ww_save_post($id)
 {
+  // don't know what is being saved if not a post_type, so we do nothing
+  if (!isset($_POST['post_type'])){
+    return $id;
+  }
+  
+  // this isn't for saving widgets
+  if ((isset($_POST['post_type']) && $_POST['post_type'] == "widget") ||
+      (isset($_GET['post_type']) && $_GET['post_type'] == "widget"))
+  {
+    return $id;
+  }
   // verify this came from the our screen and with proper authorization,
   // because save_post can be triggered at other times
-  if ( !wp_verify_nonce( $_POST['ww_noncename'], plugin_basename(__FILE__) )) {
+  if ( isset($_POST['ww_noncename']) && !wp_verify_nonce( $_POST['ww_noncename'], plugin_basename(__FILE__) )) {
     return $id;
   }
   // verify if this is an auto save routine. If it is our form has not been submitted, so we dont want
@@ -297,14 +308,7 @@ function ww_save_post($id)
   }
 }
 /* ==================================== WORDPRESS HOOK FUNCTIONS ===== */
-/*
- * Shortcode support for all widgets
- */
-function ww_single_widget_shortcode($atts) {
-  $short_array = shortcode_atts(array('id' => ''), $atts);
-  extract($short_array);
-  return ww_theme_single_widget(ww_get_single_widget($id));
-}
+
 /*
  * Javascript drag and drop for sorting
  */
@@ -313,13 +317,28 @@ function ww_admin_js(){
                   plugins_url('/ww-admin.js', __FILE__ ),
                   array('jquery-ui-core', 'jquery-ui-sortable'),
                   false);
+	$data = ww_json_data();
+	wp_localize_script( 'ww-admin-js', 'WidgetWrangler', array('l10n_print_after' => 'WidgetWrangler = '.$data.';') );	
 }
+
+/*
+ * json data for ww admin
+ */
+function ww_json_data() {
+	$WidgetWrangler = array();
+	$WidgetWrangler['data'] = array(
+		'ajaxURL' => admin_url( 'admin-ajax.php' ),
+		//'allWidgets' => ww_get_all_widgets(),
+	);
+	return json_encode($WidgetWrangler);
+}
+
 /*
  * Javascript for drag and drop sidebar sorting
  */
 function ww_sidebar_js(){
   wp_enqueue_script('ww-sidebar-js',
-                    plugins_url('/ww-sidebars.js', __FILE__ ),
+                    plugins_url('/admin/ww-sidebars.js', __FILE__ ),
                     array('jquery-ui-core', 'jquery-ui-sortable'),
                     false);
 }
@@ -343,7 +362,7 @@ function ww_adjust_css(){
  * Add css to admin interface
  */
 function ww_admin_css(){
-	print '<link rel="stylesheet" type="text/css" href="'.WW_PLUGIN_URL.'/ww-admin.css" />';
+	print '<link rel="stylesheet" type="text/css" href="'.WW_PLUGIN_URL.'/admin/ww-admin.css" />';
 }
 /*
  * Make sure to show our plugin on the admin screen
@@ -352,35 +371,4 @@ function ww_hec_show_dbx( $to_show )
 {
   array_push( $to_show, 'widget-wrangler' );
   return $to_show;
-}
-/* ==================================== HELPER FUNCTIONS ===== */
-/*
- * Helper function for making sidebar slugs
- */
-function ww_make_slug($string){
-  return stripcslashes(preg_replace('/[\s_\'\"]/','_', strtolower(strip_tags($string))));
-}
-/*
- * usort callback. I likely stole this from somewhere.. like php.net
- */
-function ww_cmp($a,$b) {
-  if ($a['weight'] == $b['weight']) return 0;
-  return ($a['weight'] < $b['weight'])? -1 : 1;
-}
-// recursive array search
-function ww_array_searchRecursive( $needle, $haystack, $strict=false, $path=array() )
-{
-  if( !is_array($haystack) ) {
-    return false;
-  }
-  foreach( $haystack as $key => $val ) {
-    if( is_array($val) && $subPath = ww_array_searchRecursive($needle, $val, $strict, $path) ) {
-        $path = array_merge($path, array($key), $subPath);
-        return $path;
-    } elseif( (!$strict && $val == $needle) || ($strict && $val === $needle) ) {
-        $path[] = $key;
-        return $path;
-    }
-  }
-  return false;
 }

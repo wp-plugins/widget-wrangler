@@ -1,10 +1,29 @@
 <?php
+
+/*
+ * postspage route handling
+ */
+function ww_postspage_page_handler()
+{
+  // save Posts page widgets if posted
+  if (isset($_GET['ww-postspage-action'])){
+    switch($_GET['ww-postspage-action']){
+      case 'update':
+        $defaults_array = ww_postspage_save_widgets($_POST);
+        break;
+    }
+    wp_redirect(get_bloginfo('wpurl').'/wp-admin/edit.php?post_type=widget&page=ww-postspage');
+  }
+  else{
+    ww_postspage_form();
+  }
+}
+
 /*
  * Default widgets page
  */
 function ww_postspage_form()
 {
-  include WW_PLUGIN_DIR."/ww-defaults.php";
   if($widgets_string = get_option('ww_postspage_widgets')){
     $widgets = unserialize($widgets_string);
   }
