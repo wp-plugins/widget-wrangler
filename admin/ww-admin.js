@@ -71,7 +71,7 @@ WidgetWrangler.sortable.refresh_all = function() {
 			var select_name = jQuery(this).attr("name");
 			
 			if ( select_val != 'disabled')
-			{
+			{ 
 				jQuery(this).parent('.ww-item').clone()
 					.addClass('nojs').prependTo("#ww-corral-"+select_val+"-items").removeClass("disabled");
 				jQuery(this).parent('.ww-item').remove();

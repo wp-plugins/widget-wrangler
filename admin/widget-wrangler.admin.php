@@ -47,7 +47,9 @@ function ww_display_admin_panel(){
 function ww_admin_sidebar_panel($pid)
 {
   // dirty hack to get post id, prob a better way.
-  $pid = $_GET['post'];
+  if (isset($_GET['post'])) {
+    $pid = $_GET['post'];
+  }
 
   if (is_numeric($pid))
   {
@@ -94,7 +96,7 @@ function ww_admin_sidebar_panel($pid)
     }
 
     // sort the sidebar's widgets
-    if ($output['active']){
+    if (isset($output['active'])){
       foreach($output['active'] as $sidebar => $unsorted_widgets){
         if ($output['active'][$sidebar]){
           ksort($output['active'][$sidebar]);
@@ -185,7 +187,7 @@ function ww_theme_admin_panel($panel_array)
     {
       // open the list
       $output.= "<h4>".$sidebar."</h4>";
-      $output.= "<ul name='".$slug."' id='ww-sidebar-".$slug."-items' class='inner ww-sortable' width='100%'>";
+      $output.= "<ul name='".$slug."' id='ww-corral-".$slug."-items' class='inner ww-sortable' width='100%'>";
 
       if (isset($panel_array['active'][$slug]) && is_array($panel_array['active'][$slug])) {
         // loop through sidebar array and add items to list
@@ -260,43 +262,46 @@ function ww_save_post($id)
 
   // OK, we're authenticated: we need to find and save the data
   $all_widgets = ww_get_all_widgets();
-
+  $active_widgets = array();
+  
   $i = 1;
   // loop through all widgets looking for those submitted
   foreach($all_widgets as $key => $widget)
   {
-    $name = $_POST["ww-".$widget->post_name];
-    $weight = $_POST["ww-".$widget->post_name."-weight"];
-    $sidebar = $_POST["ww-".$widget->post_name."-sidebar"];
-
-    // if something was submitted without a weight, make it neutral
-    if ($weight < 1){
-      $weight = $i;
+    if (isset($_POST["ww-".$widget->post_name])){
+      $name = $_POST["ww-".$widget->post_name];
+      $weight = $_POST["ww-".$widget->post_name."-weight"];
+      $sidebar = $_POST["ww-".$widget->post_name."-sidebar"];
+  
+      // if something was submitted without a weight, make it neutral
+      if ($weight < 1){
+        $weight = $i;
+      }
+      // add it to the active widgets list
+      if (($sidebar && $name) &&
+          ($sidebar != 'disabled'))
+      {
+        $active_widgets[$sidebar][] = array(
+              'id' => $widget->ID,
+              'name' => $widget->post_title,
+              'weight' => $weight,
+              );
+      }
+      $i++;
     }
-    // add it to the active widgets list
-    if (($sidebar && $name) &&
-        ($sidebar != 'disabled'))
-    {
-      $active_widgets[$sidebar][] = array(
-            'id' => $widget->ID,
-            'name' => $widget->post_title,
-            'weight' => $weight,
-            );
-    }
-    $i++;
-  }
-
-  // if none are defined, save an empty array
-  if(count($active_widgets) == 0){
-    $active_widgets = array();
   }
 
   //save what we have
   $this_post_widgets = serialize($active_widgets);
-  update_post_meta( $id, 'ww_post_widgets', $this_post_widgets);
-
+  $previous_widgets = get_post_meta($id, 'ww_post_widgets', TRUE);
+  
+  // only save if this post either used to have widgets, or now has new widgets
+  if (!empty($previous_widgets) || !empty($active_widgets)){
+    update_post_meta( $id, 'ww_post_widgets', $this_post_widgets);
+  }
+  
   // get defaults without- disabled for comparison
-  $defaults = unserialize(get_option('ww_default_widgets'));
+  $defaults = maybe_unserialize(get_option('ww_default_widgets'));
   unset($defaults['disabled']);
   $defaults = serialize($defaults);
 

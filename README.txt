@@ -84,6 +84,11 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 
 == Changelog ==
 
+= 1.5.2 =
+
+* Fix: bug with select elements on wrangler form
+* Fix: bug with defaults not being set for new posts
+
 = 1.5.1 =
 
 * Fix: bug with shortcodes not working.  Function was in wrong file.
@@ -205,4 +210,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.5.1 Shortcode bug fix.  If you use Query Wrangler, you should upgrade it to 1.5rc15+ before upgrading this for compatibility issues.
+1.5.2 Bug fixes on new post creation and sortable widgets form
