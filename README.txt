@@ -18,7 +18,7 @@ Create and manage multiple corrals ("sidebars", or groups of widgets) per page.
 
 Long time users beware!  There is a new setting called "Theme compatibility" that is now set by default on new installs.  This setting causes widgets to respect the wordpress register_sidebar display settings. 
 
-=Survey=
+= Survey =
 
 We're making great improvements with Widget Wrangler and have a new major upgrade coming soon, so we'd like to know about you and how you use it!
 
@@ -26,7 +26,7 @@ We're making great improvements with Widget Wrangler and have a new major upgrad
 
 Taking our survey offers you a chance to signup for a free Beta license and enters you to win a $50 Amazon giftcard!  We will randomly selet a winner in early March when we release the new beta.
 
-=Screencasts=
+= Screencasts =
 
 http://www.youtube.com/watch?v=oW2NgtwUuHE
 
