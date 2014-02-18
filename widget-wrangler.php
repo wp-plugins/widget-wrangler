@@ -118,6 +118,7 @@ function ww_get_all_widgets()
               post_status = 'publish'";
   $results = $wpdb->get_results($query);
   
+  $widgets = array();
   $i=0;
   $total = count($results);
   while($i < $total)
