@@ -20,11 +20,9 @@ Long time users beware!  There is a new setting called "Theme compatibility" tha
 
 = Survey =
 
-We're making great improvements with Widget Wrangler and have a new major upgrade coming soon, so we'd like to know about you and how you use it!
-
-[Take our Survey!](https://docs.google.com/forms/d/1QOeLERlwWfUEWGe4o857RjgFvhkh54kOZfr5NJsLsPM/viewform)
-
-Taking our survey offers you a chance to signup for a free Beta license and enters you to win a $50 Amazon giftcard!  We will randomly selet a winner in early March when we release the new beta.
+I've been working on an upgrade and would like to know how you use Widget Wrangler.  When you have a moment, please 
+[take my survey](https://docs.google.com/forms/d/1QOeLERlwWfUEWGe4o857RjgFvhkh54kOZfr5NJsLsPM/viewform) to help with future 
+development.
 
 = Screencasts =
 
