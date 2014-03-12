@@ -4,7 +4,8 @@ Plugin Name: Widget Wrangler
 Plugin URI: http://www.widgetwrangler.com
 Description: Widget Wrangler gives the wordpress admin a clean interface for managing widgets on a page by page basis. It also provides widgets as a post type, the ability to clone existing wordpress widgets, and granular control over widgets' templates.
 Author: Jonathan Daggerhart
-Version: 1.5.2
+Version: 1.5.3
+
 Author URI: http://www.websmiths.co
 License: GPL2
 */
@@ -132,8 +133,10 @@ function ww_get_all_widgets()
  * Retrieve and return a single widget by its ID
  * @return widget object
  */
-function ww_get_single_widget($post_id){
+function ww_get_single_widget($post_id, $widget_status = false){
   global $wpdb;
+  
+  $status = $widget_status ? ("`post_status` = '".$widget_status."' AND") : "";
   
   $query = "SELECT
               `ID`,`post_name`,`post_title`,`post_content`
@@ -141,6 +144,7 @@ function ww_get_single_widget($post_id){
               `".$wpdb->prefix."posts`
             WHERE
               `post_type` = 'widget' AND
+              ". $status ."
               `ID` = ".$post_id." LIMIT 1";
   if ($widget = $wpdb->get_row($query)) {
 
@@ -212,7 +216,7 @@ function ww_dynamic_sidebar($sidebar_slug = 'default', $wp_widget_args = array()
     $sorted_widgets = array_reverse($widgets_array[$sidebar_slug]);
     while($i < $total)
     {
-      if($widget = ww_get_single_widget($widgets_array[$sidebar_slug][$i]['id']))
+      if($widget = ww_get_single_widget($widgets_array[$sidebar_slug][$i]['id'], 'publish'))
       {
         // include theme compatibility data
         $widget->theme_compat = 0;
@@ -241,7 +245,10 @@ function ww_dynamic_sidebar($sidebar_slug = 'default', $wp_widget_args = array()
 function ww_single_widget_shortcode($atts) {
   $short_array = shortcode_atts(array('id' => ''), $atts);
   extract($short_array);
-  return ww_theme_single_widget(ww_get_single_widget($id));
+  if ($widget = ww_get_single_widget($id, 'publish')){
+    return ww_theme_single_widget($widget);
+  }
+  return '';
 }
 
 /*

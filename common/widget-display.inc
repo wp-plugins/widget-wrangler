@@ -57,6 +57,8 @@ add_filter('tw_templates', 'ww_display_templates');
  */
 function ww_theme_single_widget($widget)
 {
+  if (empty($widget)) { return ''; }
+  
   // clone
   if ($widget->widget_type == "clone"){
     $widget->clone_instance['post_name'] = $widget->post_name;
@@ -208,12 +210,12 @@ function ww_the_widget($wp_widget_class, $instance = array())
 {
   // load widget from widget factory ?
   global $wp_widget_factory;
-  $wp_widget_class_obj = $wp_widget_factory->widgets[$wp_widget_class];
+  $wp_widget = $wp_widget_factory->widgets[$wp_widget_class];
 
   // get as much ww widget data as possible 
   $ww_widget = (isset($instance['ww_widget'])) ? $instance['ww_widget'] : ww_get_single_widget($instance['ID']);
   
-  if ( !is_a($wp_widget_class_obj, 'WP_Widget') )
+  if ( !is_a($wp_widget, 'WP_Widget') )
    return;
 
   // args for spliting title from content
@@ -221,15 +223,22 @@ function ww_the_widget($wp_widget_class, $instance = array())
 
   // output to variable for replacements
   ob_start();
-     $wp_widget_class_obj->widget($args, $instance);
+     $wp_widget->widget($args, $instance);
   $temp = ob_get_clean();
 
   // get title and content separate
   $array = explode("[eXpl0de]", $temp);
 
   // prep object for template
-  $ww_widget->post_title    = ($array[0]) ? $array[0]: $instance['title'];
-  $ww_widget->post_content  = $array[1];
+  if (count($array) > 1) {
+    // we have a title
+    $ww_widget->post_title    = ($array[0]) ? $array[0]: $instance['title'];
+    $ww_widget->post_content  = $array[1];
+  }
+  else {
+    // no title
+    $ww_widget->post_content = $array[0];
+  }
 
   if (isset($instance['hide_title']) && $instance['hide_title']){
     $ww_widget->post_title = NULL;

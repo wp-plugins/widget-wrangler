@@ -20,9 +20,7 @@ Long time users beware!  There is a new setting called "Theme compatibility" tha
 
 = Survey =
 
-I've been working on an upgrade and would like to know how you use Widget Wrangler.  When you have a moment, please 
-[take my survey](https://docs.google.com/forms/d/1QOeLERlwWfUEWGe4o857RjgFvhkh54kOZfr5NJsLsPM/viewform) to help with future 
-development.
+I've been working on an upgrade and would like to know how you use Widget Wrangler. Please [take my survey](https://docs.google.com/forms/d/1QOeLERlwWfUEWGe4o857RjgFvhkh54kOZfr5NJsLsPM/viewform) to help with future development.
 
 = Screencasts =
 
@@ -91,6 +89,13 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 1. Widget Wrangler Corral Widget
 
 == Changelog ==
+
+= 1.5.3 =
+
+* Fix: bug for cloned widget forms
+* Fix: bug on clone display when title hidden
+* Fix: bug on quick edit of widgets and posts
+* New: widgets only display if status is "publish"
 
 = 1.5.2 =
 
@@ -218,4 +223,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.5.2 Bug fixes on new post creation and sortable widgets form
+1.5.3 Bug fixes on quick edits, clone forms and output.  Widget status must be 'publish' to display.

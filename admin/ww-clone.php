@@ -44,6 +44,9 @@ function ww_clone_insert($posted)
     }
   }
   
+  $wp_widget = new $this_class_name;
+  $instance = $wp_widget->update($instance, array());
+  
   // prep new widget info for saving
   $new_widget = array();
   $new_widget['post_author'] = 1; // for now
@@ -79,18 +82,21 @@ function ww_clone_insert($posted)
  */
 function ww_make_clone_instance($posted){
 	global $wp_widget_factory;
-	$clone_class = $posted['ww-data']['clone']['clone-class'];
-  $option_name = "widget-".$wp_widget_factory->widgets[$clone_class]->control_options['id_base'];
-  $instance = array();
-  
-  // loop through instance values and create an instance array
-	foreach($posted[$option_name] as $i => $settings){
-		foreach($settings as $key => $value){
-			$instance[$key] = $value;
-		}
-	}
-  
-	return $instance;
+	if (isset($posted['ww-data'])){
+    $clone_class = $posted['ww-data']['clone']['clone-class'];
+    $option_name = "widget-".$wp_widget_factory->widgets[$clone_class]->control_options['id_base'];
+    $instance = array();
+    
+    // loop through instance values and create an instance array
+    foreach($posted[$option_name] as $i => $settings){
+      foreach($settings as $key => $value){
+        $instance[$key] = $value;
+      }
+    }
+    
+    return $instance;
+  }
+  return false;
 }
 /*
  * Display widgets available for cloning.
@@ -108,7 +114,7 @@ function ww_clone_form()
     <p>Here you can clone an existing Wordpress widget into the Widget Wrangler system.</p>
     <ul class='ww-clone-widgets'>
     <?php
-      foreach ($wp_widget_factory->widgets as $class_name => $widget)
+      foreach ($wp_widget_factory->widgets as $classname => $widget)
       {
         $posted_array_key = "widget-".$widget->id_base;
         
@@ -120,7 +126,8 @@ function ww_clone_form()
         }
         
         ob_start();
-        eval('$w = new '.$class_name.'(); $w->form(array());');
+          $wp_widget = new $classname;
+          $wp_widget->form(array());
         $new_class_form = ob_get_clean();
         ?>
           <li>
@@ -133,7 +140,7 @@ function ww_clone_form()
               </div>
               <div class='widget-inside'>            
                 <form action='edit.php?post_type=widget&page=ww-clone&ww-clone-action=insert&noheader=true' method='post'>
-                  <input type='hidden' name='ww-classname' value='<?php print $class_name; ?>' />
+                  <input type='hidden' name='ww-classname' value='<?php print $classname; ?>' />
                   <input type='hidden' name='ww-keyname' value='<?php print $posted_array_key; ?>' />
                   <?php print $new_class_form; ?>
                   <input class='ww-clone-submit button button-primary button-large' type='submit' value='Create' />

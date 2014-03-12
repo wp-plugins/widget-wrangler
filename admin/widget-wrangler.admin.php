@@ -2,9 +2,6 @@
 /*
  * Widget Wrangler Admin Panel and related functions
  */
-function __jd($var){
-  //print '<pre>'.print_r($var,1).'</pre>';
-}
 /*
  * Handle the display of the admin panels, and loading of js & css
  */
@@ -232,6 +229,9 @@ function ww_theme_admin_panel($panel_array)
  */
 function ww_save_post($id)
 {
+  // skip quick edit
+  if (isset($_REQUEST['_inline_edit'])) { return; }
+
   // don't know what is being saved if not a post_type, so we do nothing
   if (!isset($_POST['post_type'])){
     return $id;
@@ -319,7 +319,7 @@ function ww_save_post($id)
  */
 function ww_admin_js(){
   wp_enqueue_script('ww-admin-js',
-                  plugins_url('/ww-admin.js', __FILE__ ),
+                  WW_PLUGIN_URL.'/admin/ww-admin.js',
                   array('jquery-ui-core', 'jquery-ui-sortable'),
                   false);
 	$data = ww_json_data();
@@ -343,7 +343,7 @@ function ww_json_data() {
  */
 function ww_sidebar_js(){
   wp_enqueue_script('ww-sidebar-js',
-                    plugins_url('/admin/ww-sidebars.js', __FILE__ ),
+                     WW_PLUGIN_URL.'/admin/ww-sidebars.js',
                     array('jquery-ui-core', 'jquery-ui-sortable'),
                     false);
 }

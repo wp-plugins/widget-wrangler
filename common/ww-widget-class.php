@@ -156,9 +156,9 @@ class Widget_Wrangler {
    */
   function wp_insert_post($post_id, $post = null)
   {
-    //Check if this call results from another event, like the "Quick Edit" option
-    // http://wordpress.org/support/topic/plugin-widget-wrangler-adv-parsing-gets-lost-after-quickedit
-		if (isset($_POST['quickeditfix']) && $_POST['quickeditfix'] != "true")  { return; }
+    // Check if this call results from another event, like the "Quick Edit" option
+    // http://wordpress.org/support/topic/quickedit-deletes-code-in-advanced-parsing?replies=1
+		if (isset($_REQUEST['_inline_edit'])) { return; }
 
     if ($post->post_type == "widget")
     {
@@ -195,6 +195,15 @@ class Widget_Wrangler {
       // update clone instance
       if ($widget_type == "clone"){
         $instance = ww_make_clone_instance($_POST);
+        $old_instance = get_post_meta($post_id, 'ww-clone-instance', true);
+        
+        // let the widget update itself
+        $classname = $_POST['ww-data']['clone']['clone-class'];
+        if (class_exists($classname)) {
+          $wp_widget = new $classname;
+          $instance = $wp_widget->update($instance, $old_instance);
+        }
+        
         $instance['ID'] = $post_id;
         if (isset($_POST['ww-data']['clone']['hide_title'])){
           $instance['hide_title'] = $_POST['ww-data']['clone']['hide_title'];
@@ -234,14 +243,13 @@ class Widget_Wrangler {
     $wp_widget_classname = get_post_meta($this->post_id,'ww-clone-classname', true);
     $wp_widget_instance = get_post_meta($this->post_id, 'ww-clone-instance', true);
     
-    //var_dump($wp_widget_instance);
-    
     if($wp_widget_classname)
     {
       // create instance form
       ob_start();
-        eval('$w = new '.$wp_widget_classname.'(); $w->form($wp_widget_instance);');
-        $instance_form = ob_get_clean();
+        $wp_widget = new $wp_widget_classname;
+        $wp_widget->form($wp_widget_instance);
+      $instance_form = ob_get_clean();
         
       $hide_title_checked = (isset($wp_widget_instance['hide_title'])) ? 'checked="checked"' : '';
       ?>
@@ -253,7 +261,6 @@ class Widget_Wrangler {
         </div>
 				<input type="hidden" name="ww-data[clone][clone-class]" value="<?php print $wp_widget_classname; ?>" />
         <input type="hidden" name="ww-data[clone][clone-instance]" value="Placeholder" />
-        <input type="hidden" name="quickeditfix" value="true" />
       <?php
     }
   }
@@ -386,7 +393,7 @@ class Widget_Wrangler {
                   ?>
                   <div>
                     <h4>WP_Widget $instance</h4>
-                    <div><pre><?php print_r($clone_instance); ?></pre></div>
+                    <div><pre><?php print htmlentities(print_r($clone_instance,1)); ?></pre></div>
                   </div>
                   <?php
                 }
