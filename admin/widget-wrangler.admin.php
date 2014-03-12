@@ -51,7 +51,7 @@ function ww_admin_sidebar_panel($pid)
   if (is_numeric($pid))
   {
     // put into array
-    $all_widgets = ww_get_all_widgets();
+    $all_widgets = ww_get_all_widgets(array('publish', 'draft'));
     $sidebars = ww_get_all_sidebars();
     $sorted_widgets = array();
     $output = array();
@@ -154,7 +154,7 @@ function ww_create_widget_list($widgets, $ref_array, $sidebars)
                         </select>
                         <input class='ww-widget-name' name='ww-".$widget->post_name."' type='hidden' value='".$widget->post_name."' />
                         <input class='ww-widget-id' name='ww-id-".$widget->ID."' type='hidden' value='".$widget->ID."' />
-                        ".$widget->post_title."
+                        ".$widget->post_title." ".(($widget->post_status == 'draft') ? '- <em>(draft)</em>': '')."
                       </li>";
 
     // place into output array
