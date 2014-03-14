@@ -10,7 +10,7 @@ A plugin for managing the display of widgets on a page by page basis. Using widg
 
 == Description ==
 
-Widget Wrangler is a plugin for Wordpress that gives administrators a clean interface for managing widgets on a page by page basis.  On each page, you can control which widets appear in which sidebars.
+Widget Wrangler is a plugin for Wordpress that gives administrators a clean interface for managing widgets on a page by page basis.  On each page, you can control what widdets appear in where.
 
 Widget Wrangler provides the following features:
 
@@ -21,10 +21,6 @@ Widget Wrangler provides the following features:
 * Control Widget visibility on any page (or post type)
 * Shortcodes for Widgets
 * Compatible with almost any existing Wordpress Widget
-
-= Survey =
-
-I've been working on an upgrade and would like to know how you use Widget Wrangler. Please [take my survey](https://docs.google.com/forms/d/1QOeLERlwWfUEWGe4o857RjgFvhkh54kOZfr5NJsLsPM/viewform) to help with future development.
 
 = Screencasts =
 
@@ -68,8 +64,8 @@ A widget's post ID is displayed in the 'Options' panel when editing that widget.
 
 = How do I display my widgets? =
 
-There are two ways to accomplish this.   The easiest way is to go to the standard Widget area under the Appearance admin menu item and drag the WW Sidebar widget into the sidebar area where it should appear, then select which WW sidebar should be shown from the widget options.
-The other way requires you to edit your template files and find any instance of the dynamic_sidebar() function.  Replace these functions with ww_dynamic_sidebar('name_of_sidebar').
+The easiest way is to go to the standard Widget area under the Appearance admin menu item and drag the "Widget Wrangler - Corral" widget into the sidebar area where you want it, then select which Widget Wrangler corral should be shown from the widget options.
+The other way requires you to edit your template files and find any instance of the dynamic_sidebar() function.  Replace these functions with ww_dynamic_sidebar('corral_slug').
 
 = How can I control the widget's template (HTML)? =
 
@@ -82,7 +78,7 @@ Mostly. Widgets designed for Wordpress 3+ are able to be used with the 'Copy WP 
 
 = What does it mean to Copy/Clone a widget? =
 
-When you Copy a wordpress widget, it creates a new widget post in the Widget Wrangler system with the settings for the original wordpress widget pre-filled.  A copied widget will contain the original widget instance form for the WP widget.
+When you Copy a wordpress widget, it creates a new widget post in the Widget Wrangler system with the settings for the original wordpress widget pre-filled.  A copied widget will contain the original widget form for the WP widget.
 
 
 == Screenshots ==
