@@ -261,7 +261,7 @@ function ww_save_post($id)
   }
 
   // OK, we're authenticated: we need to find and save the data
-  $all_widgets = ww_get_all_widgets();
+  $all_widgets = ww_get_all_widgets(array('publish', 'draft'));
   $active_widgets = array();
   
   $i = 1;

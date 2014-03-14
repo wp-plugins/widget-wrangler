@@ -12,11 +12,15 @@ A plugin for managing the display of widgets on a page by page basis. Using widg
 
 Widget Wrangler is a plugin for Wordpress that gives administrators a clean interface for managing widgets on a page by page basis.  On each page, you can control which widets appear in which sidebars.
 
-Widget Wrangler provides widgets as a post type, gives you the ability to use existing wordpress widgets (called 'Cloning'), and provides shortcode support for individual widgets.
+Widget Wrangler provides the following features:
 
-Create and manage multiple corrals ("sidebars", or groups of widgets) per page.
-
-Long time users beware!  There is a new setting called "Theme compatibility" that is now set by default on new installs.  This setting causes widgets to respect the wordpress register_sidebar display settings. 
+* Widgets as a post type
+* PHP in widgets
+* TinyMCE (wysiwyg) for Widgets
+* Custom Widget templates
+* Control Widget visibility on any page (or post type)
+* Shortcodes for Widgets
+* Compatible with almost any existing Wordpress Widget
 
 = Survey =
 
@@ -89,6 +93,10 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 1. Widget Wrangler Corral Widget
 
 == Changelog ==
+
+= 1.5.4 =
+
+* Fix: Saving draft widgets correctly when wrangling
 
 = 1.5.3 =
 
@@ -223,4 +231,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.5.3 Bug fixes on quick edits, clone forms and output.  Widget status must be 'publish' to display.
+1.5.4 Save draft widgets correctly when wrangling
