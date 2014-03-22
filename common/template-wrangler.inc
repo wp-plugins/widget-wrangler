@@ -1,19 +1,24 @@
 <?php
 /*
- * Template Wrangler 2.0 (previously 1.2)
+ * Template Wrangler 2.1 (previously 2.0)
  *
- * version = 2.0
- * version_safe = 2
+ * version = 2.1
+ * version_safe = 2_1
  * 
  * Functions
  * theme() - template some arguments
  *
+ * Changes:  2.1
+ *    - changed do_action_ref_array into apply_filters for
+ *        tw_pre_process_template
+ *        tw_pre_render_template
+ * 
  */
 
 // ensure we only load this test once
 // if ever there are 2 of the same version in separate plugins,
 // 		we won't define the same function twice
-if (!function_exists('tw_test_include_2')){
+if (!function_exists('tw_test_include_2_1')){
 	
  /*
   * Test function has unique function name
@@ -24,8 +29,8 @@ if (!function_exists('tw_test_include_2')){
   *   - this version is greater than another version
   *   - this version is equal to another version
   */
-function tw_test_include_2() {
-	$this_version = 2.0;
+function tw_test_include_2_1() {
+	$this_version = 2.1;
 	
 	// option key
 	$last_version = (float) get_option('templatewrangler_version', false);
@@ -64,7 +69,7 @@ function tw_test_include_2() {
 } // end conditional test function
 
 // test unique version 
-if (tw_test_include_2()) {
+if (tw_test_include_2_1()) {
   
 /*
  * Main Templating function
@@ -99,10 +104,10 @@ function theme($template_name = '', $arguments = array())
     // merge passed arguments into array overriding defaults
     // update the template arguments for preprocess functions
     $tw_template['arguments'] = array_merge($tw_template['arguments'], $arguments);
-
-    // wp style hook for preprocess
-    do_action_ref_array('tw_pre_process_template', array(&$tw_template));
-
+    
+    // allow other plugins to alter the template before processing
+    $tw_template = apply_filters('tw_pre_process_template', $tw_template);
+    
 		// theme functions return now if found
     if ($theme = tw_process_template($tw_template)){
 			return $theme;
@@ -118,7 +123,7 @@ function theme($template_name = '', $arguments = array())
     if(isset($tw_template['found_path']) && $tw_template['found_path'] != '')
     {
       // allow late modifications
-      do_action_ref_array('tw_pre_render_template', array(&$tw_template));
+      apply_filters('tw_pre_render_template', $tw_template);
 
       // start output buffer
       ob_start();
@@ -156,6 +161,13 @@ function tw_process_template(&$template){
     $template['default_path'] = dirname($caller['file']);
   }
   
+  // allow for including files
+  if (isset($template['includes']) && is_array($template['includes'])){
+    foreach ($template['includes'] as $include_file_location){
+      @include_once $include_file_location;
+    }
+  }
+  
   // if there is a theme based preprocess function, run it on the arguments
   if(function_exists($theme_folder.'_'.$template['name'].'_preprocess')){
     $preprocess = $theme_folder.'_'.$template['name'].'_preprocess';
@@ -181,6 +193,7 @@ function tw_process_template(&$template){
       return call_user_func_array('theme_'.$template['name'], $template['arguments']);
     }
   }
+  // help clean up
   // else if given templates is not an array, make it one
   else if(!is_array($template['files']))
   {
@@ -197,9 +210,13 @@ function tw_find_template(&$template){
   $found_path = '';
   foreach($template['files'] as $suggestion)
   {
+    $replace_count = 0;
+    $tokens_count = 0;
+    
     // look for an argument in template suggestions
     if (preg_match('/\[.*\]/',$suggestion))
     {
+      $tokens_count = substr_count($suggestion, '[');
       // we have arguments, lets build the possibilities
       $search = array();
       $replace = array();
@@ -207,15 +224,21 @@ function tw_find_template(&$template){
       {
         // only apply to strings and numerics
         if(is_string($template['arguments'][$key]) || is_numeric($template['arguments'][$key])){
-          $search[] = '['.$key.']';
-          $replace[] = $value;
+          if (trim($template['arguments'][$key])){
+            $search[] = '['.$key.']';
+            $replace[] = $value;
+          }
         }
       }
 
       // do the replacement
-      $suggestion = str_replace($search, $replace, $suggestion);
+      $suggestion = str_replace($search, $replace, $suggestion, $replace_count);
     }
-    $template['suggestions'][] = $suggestion;
+    
+    // only accept a suggestion if all tokens were replaced
+    if ($tokens_count == 0 || ($replace_count > 0 && $tokens_count == $replace_count)){
+      $template['suggestions'][] = $suggestion;
+    }
   }
 
   // loop through suggestions and find existing template in theme path first

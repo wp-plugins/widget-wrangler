@@ -1,6 +1,5 @@
 === Widget Wrangler ===
 Contributors: daggerhart
-Donate link: http://widgetwrangler.com
 Tags: widget, admin, widgets, administration, sidebar, manage
 Requires at least: 3
 Tested up to: 3.8.1
@@ -10,7 +9,7 @@ A plugin for managing the display of widgets on a page by page basis. Using widg
 
 == Description ==
 
-Widget Wrangler is a plugin for Wordpress that gives administrators a clean interface for managing widgets on a page by page basis.  On each page, you can control what widdets appear in where.
+Widget Wrangler is a plugin for Wordpress that gives administrators a clean interface for managing widgets on a page by page basis.  On each page, you can control what widgets appear where.
 
 Widget Wrangler provides the following features:
 
@@ -19,8 +18,12 @@ Widget Wrangler provides the following features:
 * TinyMCE (wysiwyg) for Widgets
 * Custom Widget templates
 * Control Widget visibility on any page (or post type)
+* Control Widget visibility globally (Display Logic)
+* Alter WP Sidebar HTML
 * Shortcodes for Widgets
 * Compatible with almost any existing Wordpress Widget
+* Hide Widget Titles
+* Automatic Theme Setup
 
 = Screencasts =
 
@@ -89,6 +92,13 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 1. Widget Wrangler Corral Widget
 
 == Changelog ==
+
+= 2.0 =
+
+* New: Widget Diplay logic allows you to control a widget's visibility globally
+* New: Customize WP Sidebar HTML
+* New: More granular template suggestions
+* New: Presets
 
 = 1.5.4 =
 
@@ -227,4 +237,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-1.5.4 Save draft widgets correctly when wrangling
+2.0 New Features
