@@ -237,4 +237,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-2.0 New Features
+1.5.4 Bug fixes
