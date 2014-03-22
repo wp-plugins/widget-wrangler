@@ -65,11 +65,9 @@ class Widget_Wrangler_Admin {
   function add_hooks(){
     add_action( 'admin_init', array( $this, 'wp_admin_init' ) );
     
-    if ($this->_is_editing_enabled_post_type()){
-      // this is the best hook i could find that ensures we're editing a post
-      // and the global $post object is available
-      add_action( 'add_meta_boxes', array( $this->ww, 'find_all_page_widgets' ), 10000 );
-    }
+    // this is the best hook i could find that ensures we're editing a post
+    // and the global $post object is available
+    add_action( 'add_meta_boxes', array( $this->ww, 'find_all_page_widgets' ), -99 );
     
     // auto-add common wp hooks
     foreach ($this->addons as $addon){
