@@ -27,13 +27,13 @@ class Widget_Wrangler_Sidebar_Widget extends WP_Widget {
   function Widget_Wrangler_Sidebar_Widget()
   {
     // Widget settings. 
-    $widget_ops = array( 'classname' => 'widget-wrangler-sidebar', 'description' => __('A single Widget Wrangler Sidebar', 'sidebar') );
+    $widget_ops = array( 'classname' => 'widget-wrangler-widget-classname', 'description' => __('A single Widget Wrangler Corral (Sidebar)', 'sidebar') );
     
     // Widget control settings. 
-    $control_ops = array( 'id_base' => 'widget-wrangler-sidebar' );
+    $control_ops = array( 'id_base' => 'widget-wrangler-sidebar');
     
     // Create the widget. 
-    $this->WP_Widget( 'widget-wrangler-sidebar', __('WW Sidebar', 'widgetwranglersidebar'), $widget_ops, $control_ops );
+    $this->WP_Widget( 'widget-wrangler-sidebar', __('Widget Wrangler - Corral', 'widgetwranglersidebar'), $widget_ops, $control_ops );
   }
   /**
    * How to display the widget on the screen.
@@ -41,7 +41,7 @@ class Widget_Wrangler_Sidebar_Widget extends WP_Widget {
   function widget( $args, $instance )
   {
     extract( $args );
-    ww_dynamic_sidebar($instance['sidebar']);
+    ww_dynamic_sidebar($instance['sidebar'], $args);
   }
 	/**
 	 * Update the widget settings.
@@ -70,7 +70,7 @@ class Widget_Wrangler_Sidebar_Widget extends WP_Widget {
     
     <?php // Sidebar: Select Box ?>
     <p>
-     <label for="<?php echo $this->get_field_id( 'sidebar' ); ?>"><?php _e('Sidebar:', 'sidebar'); ?></label> 
+     <label for="<?php echo $this->get_field_id( 'sidebar' ); ?>"><?php _e('Corral:', 'corral'); ?></label> 
      <select id="<?php echo $this->get_field_id( 'sidebar' ); ?>" name="<?php echo $this->get_field_name( 'sidebar' ); ?>" class="widefat" style="width:100%;">
       <?php
         foreach($sidebars as $slug => $name){
