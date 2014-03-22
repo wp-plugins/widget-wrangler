@@ -518,7 +518,7 @@ class Widget_Wrangler_Admin {
     
     // OK, we're authenticated:
     // we need to find and save the data
-    $widgets = $this->ww->admin->_serialize_widgets($_POST['ww-data']['widgets']);
+    $widgets = $this->_serialize_widgets($_POST['ww-data']['widgets']);
     
     // allow other plugins to modify the widgets or save other things
     $widgets = apply_filters('widget_wrangler_save_widgets_alter', $widgets);
