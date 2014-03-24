@@ -90,8 +90,8 @@ Widget Wrangler allows you to alter the HTML a sidebar produces.  This makes it 
 == Screenshots ==
 
 1. Widget Page Manager
-1. Individual Widget (Some Pro-only features shown)
-1. Cloned Wordpress Widget (mini loops)
+1. Individual Widget - Some features shown are for the Pro version only.
+1. Cloned Wordpress Widget - mini loops
 1. Widget Wrangler Corral Widget
 
 == Changelog ==
