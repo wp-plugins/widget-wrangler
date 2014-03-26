@@ -72,7 +72,7 @@ The other way requires you to edit your template files and find any instance of 
 
 = How can I control the widget's template (HTML)? =
 
-In the widget-wrangler directory there is a file named 'templates/widget.php' (or, 'templates/widget-1x.php' for a more straight forward template).  Copy this file to your theme's root directory and rename it 'widget.php'.  You can edit the HTML in the file to have widgets defaultly appear as you want.
+In the widget-wrangler directory there is a file named 'templates/widget.php'.  Copy this file to your theme's root directory and rename it 'widget.php'.  You can edit the HTML in the file to have widgets defaultly appear as you want.
 To template specific widgets, save a copy of templates/widget.php as widget-[widget ID].php in your theme directory. (eg. widget-121.php, where 121 is the widget's ID)
 
 = Can I use existing wordpress widgets? =
@@ -83,19 +83,23 @@ Mostly. Widgets designed for Wordpress 3+ are able to be used with the 'Copy WP 
 
 When you Copy a wordpress widget, it creates a new widget post in the Widget Wrangler system with the settings for the original wordpress widget pre-filled.  A copied widget will contain the original widget form for the WP widget.
 
-= What is the Sidebars page? =
-
-Widget Wrangler allows you to alter the HTML a sidebar produces.  This makes it easier when using a downloaded theme, or if you don't know how to edit a sidebar's registration in a theme's function.php file.
 
 == Screenshots ==
 
 1. Widget Page Manager
-1. Individual Widget - Some features shown are for the Pro version only.
-1. Cloned Wordpress Widget - mini loops
+1. Individual Widget
+1. Cloned Wordpress Widget
 1. Widget Wrangler Corral Widget
 
 == Changelog ==
 
+= 2.0.2 =
+
+* Bug fix: Saving settings without Pro License
+
+= 2.0.1 =
+
+* Upgrade bug fix
 
 = 2.0 =
 
@@ -241,4 +245,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-2.0.1 New Features
+2.0.2 Bug fix when saving settings
