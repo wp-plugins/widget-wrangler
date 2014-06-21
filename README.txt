@@ -272,4 +272,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-2.1.1 Clone display bug fixe
+2.1.1 Clone display bug fixed
