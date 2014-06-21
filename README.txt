@@ -100,6 +100,10 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 
 == Changelog ==
 
+= 2.1.1 =
+
+* Bug fix: Display of cloned widgets broken in 2.1
+
 = 2.1 =
 
 * Feature: Hide widget from sortable Wrangler
@@ -268,4 +272,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-2.1 Feature and bug fixes
+2.1.1 Clone display bug fixe
