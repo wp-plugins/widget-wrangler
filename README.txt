@@ -9,7 +9,7 @@ A plugin for managing the display of widgets on a page by page basis. Using widg
 
 == Description ==
 
-Widget Wrangler is a plugin for Wordress that gives administrators a clean interface for managing widgets on a page by page basis.  On each page, you can control what widgets appear where.
+Widget Wrangler is a plugin for WordPress that gives administrators a clean interface for managing widgets on a page by page basis.  On each page, you can control what widgets appear where.
 
 Widget Wrangler provides the following features:
 
