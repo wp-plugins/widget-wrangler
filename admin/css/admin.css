@@ -1,12 +1,6 @@
-
 /****************************************************
  * Common
  ****************************************************/
-#content_WWList_text { /* tinymce listbox */
-	font-size: 11px;
-	line-height: 22px;
-	width: 75px;
-}
 #ww-page-top {
 	text-align: right;
 	margin-bottom: 16px;
@@ -109,7 +103,7 @@ hr.ww-hr {
 	display: none;
 }
 #ww-post-edit-message {
-	display: none;
+	visibility: hidden;
 	padding: 4px 8px;
 	margin: 6px 0px 12px;
 	background: #FFFFEE;
@@ -237,7 +231,13 @@ label.ww-preset-checkbox input {
 .ww-presets {
 	padding: 12px 0px 16px;
 }
-#ww-post-preset { border-bottom: 1px solid #666;padding-top: 8px; }
+.ww-inner {
+	padding: 12px;
+}
+#ww-add-new-widget h2 {
+	margin: 0;
+}
+#ww-post-preset, #ww-add-new-widget { border-bottom: 1px solid #666;padding-top: 8px; }
 #ww-post-preset p { padding-left: 20px; }
 
 #ww-post-preset .description {
@@ -481,6 +481,9 @@ li.ww-corral-sort-item{
 	box-shadow: 0 1px 0 #FFFFFF;
 	text-shadow: 0 1px 0 #FFFFFF;
 }
+li.ww-item:hover {
+	background-color: #f9f9f9;
+}
 
 .ww-widget-weight {
   display: none;
@@ -596,4 +599,16 @@ div.ww-setting-content {
 }
 .ww-alter-sidebar-field input[type=text] {
   width: 85%;
+}
+
+/*
+ * TinyMCE
+ */
+/* trouble with long lists */
+.mce-widget-wrangler-tinymce-button,
+body.widget-wrangler-tinymce-button .mce-floatpanel.mce-menu.mce-fixed{
+  position: absolute !important;
+}
+i.mce-i-widget-wrangler-button-icon {
+  background: transparent url('../images/wrangler_icon.png') center center no-repeat;
 }
