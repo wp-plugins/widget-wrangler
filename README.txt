@@ -2,7 +2,7 @@
 Contributors: daggerhart
 Tags: widget, admin, widgets, administration, sidebar, manage
 Requires at least: 3
-Tested up to: 4.0
+Tested up to: 4.2.2
 Stable tag: trunk
 
 A plugin for managing the display of widgets on a page by page basis. Using widgets as a post type.
@@ -21,7 +21,7 @@ Widget Wrangler provides the following features:
 * Control Widget visibility globally (Display Logic)
 * Alter WP Sidebar HTML
 * Shortcodes for Widgets
-* Compatible with almost any existing Wordpress Widget
+* Compatible with almost any existing WordPress Widget
 * Hide Widget Titles
 * Automatic Theme Setup
 
@@ -40,7 +40,7 @@ http://www.youtube.com/watch?v=oW2NgtwUuHE
 
 = Automatic Theme Setup =
 
-If you want to use a single Corral per Wordpress sidebar (or are unsure what all this means), visit Widget Wrangler >> Settings >> Tools and click "Setup Theme".  This will automatically create one Corral for each Wordpress Sidebar, and place the Corral Widget into each Sidebar.
+If you want to use a single Corral per WordPress sidebar (or are unsure what all this means), visit Widget Wrangler >> Settings >> Tools and click "Setup Theme".  This will automatically create one Corral for each WordPress Sidebar, and place the Corral Widget into each Sidebar.
 
 = Manual Setup =
 
@@ -53,7 +53,7 @@ If you want to use a single Corral per Wordpress sidebar (or are unsure what all
 
 = What is a Corral =
 
-A Corral is an arbitrary group of widgets.  Wordpress calls them "sidebars", but they are not ultimately limited by that terminology.  You could have multiple Corrals appear within a single Sidebar if needed.
+A Corral is an arbitrary group of widgets.  WordPress calls them "sidebars", but they are not ultimately limited by that terminology.  You could have multiple Corrals appear within a single Sidebar if needed.
 
 = Where does a widget's html come from? = 
 
@@ -82,23 +82,40 @@ The other way requires you to edit your template files and find any instance of 
 In the widget-wrangler directory there is a file named 'templates/widget.php'.  Copy this file to your theme's root directory and rename it 'widget.php'.  You can edit the HTML in the file to have widgets defaultly appear as you want.
 To template specific widgets, save a copy of templates/widget.php as widget-[widget ID].php in your theme directory. (eg. widget-121.php, where 121 is the widget's ID)
 
-= Can I use existing wordpress widgets? =
+= Can I use existing WordPress widgets? =
 
-Mostly. Widgets designed for Wordpress 3+ are able to be used with the 'Copy WP Widget' option in the Widget Wrangler menu.  Widgets programmed for older versions of wordpress may not work.
+Mostly. Widgets designed for WordPress 3+ are able to be used with the 'Copy WP Widget' option in the Widget Wrangler menu.  Widgets programmed for older versions of WordPress may not work.
 
 = What does it mean to Copy/Clone a widget? =
 
-When you Copy a wordpress widget, it creates a new widget post in the Widget Wrangler system with the settings for the original wordpress widget pre-filled.  A copied widget will contain the original widget form for the WP widget.
+When you Copy a WordPress widget, it creates a new widget post in the Widget Wrangler system with the settings for the original WordPress widget pre-filled.  A copied widget will contain the original widget form for the WP widget.
 
 
 == Screenshots ==
 
 1. Widget Page Manager
 1. Individual Widget
-1. Cloned Wordpress Widget
+1. Cloned WordPress Widget
 1. Widget Wrangler Corral Widget
 
 == Changelog ==
+
+= 2.2.1 =
+
+* Bug fix: Fixed row index collisions for sortable widgets
+
+= 2.2.0 =
+
+* Feature: Widgets can be added multiple times in multiple corrals.
+
+= 2.1.6 =
+
+* Bug fix: TinyMCE editor button
+* Bug fix: Edit widget page lost $post context if widget contained a custom wp_query
+
+= 2.1.5 =
+
+* Bug Fix: WordPress Widget for Widget Wrangler widget.
 
 = 2.1.4 =
 
@@ -213,8 +230,8 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 = 1.4 =
 
 * Feature: Preview Widget on the widget's edit page
-* Feature: Add WW sidebars using Wordpress's standard widget system
-* Bug fix: Issue with cloning specific wordpress widgets
+* Feature: Add WW sidebars using WordPress's standard widget system
+* Bug fix: Issue with cloning specific WordPress widgets
 * Bug fix: Images not showing up in non-standard install directories
 
 = 1.3.2 =
@@ -229,7 +246,7 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 
 * Feature: Now use Widget Wrangler on any post type and the blog page (Posts page).
 * Feature: Use template with advanced parsed widget.
-* Feature: Set widgets for the home/frontpage when using Wordpress's 'Reading Setting' for 'Front page displays' as 'Your latest posts'. Settings >> Reading >> Front page displays.
+* Feature: Set widgets for the home/frontpage when using WordPress's 'Reading Setting' for 'Front page displays' as 'Your latest posts'. Settings >> Reading >> Front page displays.
 * Programming: Refactored function names to standardize concepts and descriptors
 
 = 1.2.1 =
@@ -249,7 +266,7 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 
 = 1.1rc8 =
 
-* Fix for javascript with wordpress 3.2 update.  Added option to reset all widgets on all pages.
+* Fix for javascript with WordPress 3.2 update.  Added option to reset all widgets on all pages.
 
 = 1.1rc7 =
 
@@ -257,7 +274,7 @@ When you Copy a wordpress widget, it creates a new widget post in the Widget Wra
 
 = 1.1rc6 =
 
-* Fix for disappearing menu items with wordpress 3.1 update.
+* Fix for disappearing menu items with WordPress 3.1 update.
 
 = 1.1rc5 =
 
@@ -288,4 +305,4 @@ Initial Release
 
 == Upgrade Notice ==
 
-2.1.4 Bug fixes and i18n ready.
+2.2.1 Feature & bugfix: Now able to add widget more than once, and to more than one corral.
