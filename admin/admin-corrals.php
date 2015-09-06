@@ -14,9 +14,9 @@ function ww_corrals_admin_addon($addons){
 class WW_Corrals_Admin  {
   public $page_hook;
   
-  function __construct(){}
-  function wp_init(){}
-  function wp_admin_init(){}
+  function __construct(){
+    add_action( 'admin_menu', array( $this, 'wp_admin_menu' ) );
+  }
   
   function wp_admin_menu(){
     $page_title = 'Corrals';
@@ -137,8 +137,11 @@ class WW_Corrals_Admin  {
     <div class='wrap'>
       <h2><?php _e("Widget Corrals", 'widgetwrangler'); ?></h2>
       <p>
-        <?php _e("A Corral is an arbitrary group of widgets. WordPress and preview Widget Wrangler versions call them 'sidebars', but they are ultimately not limited by that terminology.", 'widgetwrangler'); ?>
-      </p>                           
+        <?php _e("A Corral is an arbitrary group of widgets. WordPress and previous Widget Wrangler versions call them 'sidebars', but they are ultimately not limited by that terminology.", 'widgetwrangler'); ?>
+      </p>
+      <p>
+        <?php _e("In general, you probably want at least one corral per theme sidebar.", 'widgetwrangler'); ?>
+      </p>
     <div id='ww-corral-page'>
       <div class="ww-setting-column">
         

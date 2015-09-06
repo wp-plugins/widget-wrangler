@@ -21,7 +21,15 @@ class WW_Presets_Admin  {
   public $page_hook;
   public $current_preset_id = 0;
   public $new_preset_id = FALSE;
-  
+
+  function __construct(){
+    add_action( 'admin_init', array( $this, 'wp_admin_init' ) );
+    add_action( 'admin_menu', array( $this, 'wp_admin_menu' ) );
+  }
+
+  /**
+   * Implements action 'admin_init'
+   */
   function wp_admin_init(){
     add_action( 'widget_wrangler_form_top', array( $this, 'ww_form_top' ));
     add_action( 'wp_ajax_ww_form_ajax', array( $this, 'ww_form_ajax' ) );
@@ -33,7 +41,14 @@ class WW_Presets_Admin  {
       $this->ww->admin->init_sortable_widgets();
     }
   }
-  
+
+  //
+  function wp_admin_menu(){
+    $page_title = 'Presets';
+
+    $this->page_hook = add_submenu_page($this->ww->admin->parent_slug, $page_title, $page_title, $this->ww->admin->capability, 'presets', array( $this, '_menu_router' ));
+  }
+
   //
   function ww_save_widgets_alter($widgets){
     // '0' handles itself
@@ -60,13 +75,6 @@ class WW_Presets_Admin  {
     $this->ww->presets->new_preset_id = $new_preset_id;
     
     return $widgets;
-  }
-  
-  //
-  function wp_admin_menu(){
-    $page_title = 'Presets';
-
-    $this->page_hook = add_submenu_page($this->ww->admin->parent_slug, $page_title, $page_title, $this->ww->admin->capability, 'presets', array( $this, '_menu_router' ));
   }
 
   /*
@@ -280,8 +288,15 @@ class WW_Presets_Admin  {
     $all_presets     = $this->ww->presets->get_all_presets();
     $this_preset     = $this->ww->presets->get_preset($preset_id);
     $preset_variety  = $this->ww->presets->preset_varieties[$this_preset->variety];
-    
-    ob_start();
+
+
+	  // themes draggable widgets
+	  $sortable = new WW_Admin_Sortable();
+
+	  // need to remove the normal preset form_top. can't select preset for preset
+	  remove_action( 'widget_wrangler_form_top', array( $this, 'ww_form_top' ));
+
+	  ob_start();
     ?>
     <div class='wrap'>
       <form id="widget-wrangler-form" action='edit.php?post_type=widget&page=presets&ww_action=handle_button&noheader=true' method='post' name='widget-wrangler-form'>				
@@ -372,12 +387,18 @@ class WW_Presets_Admin  {
             <input type="hidden" name="preset-id" value="<?php print $preset_id; ?>" />
             <input type="hidden" name="preset-variety" value="<?php print $preset_variety['slug']; ?>" /> 
             
-            <div class="ww-admin-tab-inner">            
+            <div class="ww-admin-tab-inner">
+
+			<div id="widget_wrangler_form_top">
+				<?php
+				// TODO, dry this action up
+				do_action('widget_wrangler_form_top');
+				?>
+			</div>
+			<div id='ww-post-edit-message'>* <?php _e("Widget changes will not be updated until you save.", 'widgetwrangler'); ?>"</div>
+
               <div id="preset-widgets">
-                <?php
-                  // themes draggable widgets
-                  print $this->ww->admin->theme_sortable_sidebars($this_preset->widgets);
-                ?>
+                <?php print $sortable->theme_sortable_corrals( $this_preset->widgets ); ?>
               </div>
             </div>
           </div>
